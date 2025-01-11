@@ -1,279 +1,626 @@
-\chapter{Вёрстка таблиц}\label{ch:ch3}
+\chapter{Динамика системы подвижности на кривошипно-шатунных опорах} \label{chapt3}
 
-\section{Таблица обыкновенная}\label{sec:ch3/sect1}
+Трехстепенные электромеханические платформы, рассмотренные в предыдущих главах в силу особенностей выбранного привода и кинематической схемы обладают оптимальными характеристиками с точки зрения энергопотребления, затрат на эксплуатацию и обслуживание.  К основным недостаткам данного типа СП относят сравнительно низкое качество имитации движений, требующих больших ускорений – реакция с запозданием при проезде препятствий, неправдоподобные ощущения при ударах модели техники об объекты на 3D-сцене, пр. Данная особенность как правило связана с невысоким значением перегрузочной способности по вращающему моменту в используемых асинхронных двигателях. Помимо этого, при определенной конфигурации кабины тренажера (высоко расположенный центр тяжести, большая масса кабины), мотор-редукторы СП могут длительное время находиться в пусковом режиме работы. В связи с этим, повышенное внимание при разработке алгоритмов управления СП уделяется точному расчету рабочей зоны как по кинематическим, там и динамическим ограничениям платформы.
 
-Так размещается таблица:
+\section{Уравнения обратной задачи динамики}
 
-\begin{table} [htbp]
-    \centering
-    \begin{threeparttable}% выравнивание подписи по границам таблицы
-        \caption{Название таблицы}\label{tab:Ts0Sib}%
-        \begin{tabular}{| p{3cm} || p{3cm} | p{3cm} | p{4cm}l |}
-            \hline
-            \hline
-            Месяц   & \centering \(T_{min}\), К & \centering \(T_{max}\), К & \centering  \((T_{max} - T_{min})\), К & \\
-            \hline
-            Декабрь & \centering  253.575       & \centering  257.778       & \centering      4.203                  & \\
-            Январь  & \centering  262.431       & \centering  263.214       & \centering      0.783                  & \\
-            Февраль & \centering  261.184       & \centering  260.381       & \centering     \(-\)0.803              & \\
-            \hline
-            \hline
-        \end{tabular}
-    \end{threeparttable}
-\end{table}
+Схема 3DOF платформы с изображением сил приведена на рис. 1. Особенностью используемой кинематической схемы является центральный карданный шарнир, удерживающий платформу от перемещений по курсу. 
+ 
+\begin{figure}[h]
+	\center
+	\includegraphics[width=0.75\textwidth]{3dof_kinematics_scheme_dynamic}
+	\caption{Кинематическая схема подвижности 3DOF}
+	\label{img:3dof_dynamic_scheme}
+\end{figure}
 
-\begin{table} [htbp]% Пример записи таблицы с номером, но без отображаемого наименования
-    \centering
-    \begin{threeparttable}% выравнивание подписи по границам таблицы
-        \caption{}%
-        \label{tab:test1}%
-        \begin{SingleSpace}
-            \begin{tabular}{| c | c | c | c |}
-                \hline
-                Оконная функция & \({2N}\) & \({4N}\) & \({8N}\) \\ \hline
-                Прямоугольное   & 8.72     & 8.77     & 8.77     \\ \hline
-                Ханна           & 7.96     & 7.93     & 7.93     \\ \hline
-                Хэмминга        & 8.72     & 8.77     & 8.77     \\ \hline
-                Блэкмана        & 8.72     & 8.77     & 8.77     \\ \hline
-            \end{tabular}%
-        \end{SingleSpace}
-    \end{threeparttable}
-\end{table}
+Для решения обратной задачи динамики требуется определить силы реакции шатунов на платформу. Т.к. векторы данных сил всегда направлены вдоль шатунов, эти векторы для удобства можно представить в виде произведений $k_1S_1$, $k_2S_2$, $k_3S_3$, где $k_1$, $k_2$, $k_3$ – масштабные коэффициенты, $S_1$, $S_2$, $S_3$ – векторы положения шатунов в неподвижной системе координат, которые определяются по координатам точек крепления шатунов к кривошипам и подвижной платформе.
 
-Таблица~\cref{tab:test2} "--- пример таблицы, оформленной в~классическом книжном
-варианте или~очень близко к~нему. \mbox{ГОСТу} по~сути не~противоречит. Можно
-ещё~улучшить представление, с~помощью пакета \verb|siunitx| или~подобного.
+Обозначим за $S_1^0$, $S_2^0$, $S_3^0$ векторы от центра тяжести до точек крепления шатунов к подвижной платформе. Также ведем обозначения вертикальных проекций векторов $S_{iz}$, нормированных по длине шатуна в земной и подвижной системе координат:
+\begin{equation}
+\label{eq:DynamicVerticaldPojections}
+	F_i = \frac{1}{L}S_{i,z};~ D_i = \frac{1}{L}S_{i,z}^0;~i=1\dots3
+\end{equation}
 
-\begin{table} [htbp]%
-    \centering
-    \caption{Наименование таблицы, очень длинное наименование таблицы, чтобы посмотреть как оно будет располагаться на~нескольких строках и~переноситься}%
-    \label{tab:test2}% label всегда желательно идти после caption
-    \renewcommand{\arraystretch}{1.5}%% Увеличение расстояния между рядами, для улучшения восприятия.
-    \begin{SingleSpace}
-        \begin{tabular}{@{}@{\extracolsep{20pt}}llll@{}} %Вертикальные полосы не используются принципиально, как и лишние горизонтальные (допускается по ГОСТ 2.105 пункт 4.4.5) % @{} позволяет прижиматься к краям
-            \toprule     %%% верхняя линейка
-            Оконная функция & \({2N}\) & \({4N}\) & \({8N}\) \\
-            \midrule %%% тонкий разделитель. Отделяет названия столбцов. Обязателен по ГОСТ 2.105 пункт 4.4.5
-            Прямоугольное   & 8.72     & 8.77     & 8.77     \\
-            Ханна           & 7.96     & 7.93     & 7.93     \\
-            Хэмминга        & 8.72     & 8.77     & 8.77     \\
-            Блэкмана        & 8.72     & 8.77     & 8.77     \\
-            \bottomrule %%% нижняя линейка
-        \end{tabular}%
-    \end{SingleSpace}
-\end{table}
+Т.к. движение по курсу отсутствует, при составлении уравнения сил учитывается лишь вертикальная составляющая:
+\begin{equation}
+\label{eq:DynamicVerticalForcesEq1}
+	m\ddot{h} = -k_sh + f_0 - mg + \sum_{i=1}^3 k_iS_{i,z},
+\end{equation}
+где $k_s$ -- коэффициент упругости пружины, $h$ -- вертикальное смещение, $m$ -- масса подвижной платформы с закрепленным на ней объектом, $f_0$ -- значение подъемной силы, создаваемой пружиной при $h=0$.
 
-\section{Таблица с многострочными ячейками и примечанием}
+Перепишем уравнение относительно нормированных величин $F_i$:
+\begin{equation}
+\label{eq:DynamicVerticalForcesEq2}
+	\sum_{i=1}^3k_iF_i = \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)
+\end{equation}
 
-В таблице \cref{tab:makecell} приведён пример использования команды
-\verb+\multicolumn+ для объединения горизонтальных ячеек таблицы,
-и команд пакета \textit{makecell} для добавления разрыва строки внутри ячеек.
-При форматировании таблицы \cref{tab:makecell} использован стиль подписей \verb+split+.
-Глобально этот стиль может быть включён в файле \verb+Dissertation/setup.tex+ для диссертации и в
-файле \verb+Synopsis/setup.tex+ для автореферата.
-Однако такое оформление не~соответствует ГОСТ.
+Далее запишем уравнение моментов движения твердого тела в связанной системе координат. Уравнение моментов записывается относительно центра тяжести подвижной платформы с закрепленным объектом. Положение центра тяжести в системе координат платформы обозначим $X^0_C = \left[x_c, y_c, z_c\right]^T$. Тогда момент, создаваемый центральной опорой будет равен:
+\begin{equation}
+\label{eq:TorqueFromCentralSupport}
+M_S^0 = -X_C^0 \times F_S^0 = -\left(X_C^0 \times e_S\right)\left(f_0 - k_sh\right),
+\end{equation}
 
-\begin{table} [htbp]
-    \captionsetup[table]{format=split}
-    \centering
-    \begin{threeparttable}% выравнивание подписи по границам таблицы
-        \caption{Пример использования функций пакета \textit{makecell}}%
-        \label{tab:makecell}%
-        \begin{tabular}{| c | c | c | c |}
-            \hline
-            Колонка 1                      & Колонка 2 &
-            \thead{Название колонки 3,                                                 \\
-            не помещающееся в одну строку} & Колонка 4                                 \\
-            \hline
-            \multicolumn{4}{|c|}{Выравнивание по центру}                               \\
-            \hline
-            \multicolumn{2}{|r|}{\makecell{Выравнивание                                \\ к~правому краю}} &
-            \multicolumn{2}{l|}{Выравнивание к левому краю}                            \\
-            \hline
-            \makecell{В этой ячейке                                                    \\
-            много информации}              & 8.72      & 8.55                   & 8.44 \\
-            \cline{3-4}
-            А в этой мало                  & 8.22      & \multicolumn{2}{c|}{5}        \\
-            \hline
-        \end{tabular}%
-    \end{threeparttable}
-\end{table}
+где $F^0_S$ – сила, действующая на платформу со стороны центральной опоры, $e_3 = \left[0~0~1\right]^T$ -– единичный вектор, направленный по оси $Z$. В дальнейшем будут использоваться первые две компоненты векторов моментов, т.к. вращение по курсу не рассматривается. Для того, чтобы учесть этот факт, введем вспомогательную матрицу $E_{12}$:
+\begin{equation}
+\label{eq:AuxiliaryUnitMatrix}
+E_{12} = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{pmatrix},
+\end{equation}
 
-Таблицы~\cref{tab:test3,tab:test4} "--- пример реализации расположения
-примечания в~соответствии с ГОСТ 2.105. Каждый вариант со своими достоинствами
-и~недостатками. Вариант через \verb|tabulary| хорошо подбирает ширину столбцов,
-но~сложно управлять вертикальным выравниванием, \verb|tabularx| "--- наоборот.
-\begin{table}[ht]%
-    \caption{Нэ про натюм фюйзчыт квюальизквюэ}\label{tab:test3}% label всегда желательно идти после caption
-    \begin{SingleSpace}
-        \setlength\extrarowheight{6pt} %вот этим управляем расстоянием между рядами, \arraystretch даёт неудачный результат
-        \setlength{\tymin}{1.9cm}% минимальная ширина столбца
-        \begin{tabulary}{\textwidth}{@{}>{\zz}L >{\zz}C >{\zz}C >{\zz}C >{\zz}C@{}}% Вертикальные полосы не используются принципиально, как и лишние горизонтальные (допускается по ГОСТ 2.105 пункт 4.4.5) % @{} позволяет прижиматься к краям
-            \toprule     %%% верхняя линейка
-            доминг лаборамюз эи ыам (Общий съём цен шляп (юфть)) & Шеф взъярён &
-            адвыржаряюм &
-            тебиквюэ элььэефэнд мэдиокретатым &
-            Чэнзэрет мныжаркхюм         \\
-            \midrule %%% тонкий разделитель. Отделяет названия столбцов. Обязателен по ГОСТ 2.105 пункт 4.4.5
-            Эй, жлоб! Где туз? Прячь юных съёмщиц в~шкаф Плюш изъят. Бьём чуждый цен хвощ! &
-            \({\approx}\) &
-            \({\approx}\) &
-            \({\approx}\) &
-            \( + \) \\
-            Эх, чужак! Общий съём цен &
-            \( + \) &
-            \( + \) &
-            \( + \) &
-            \( - \) \\
-            Нэ про натюм фюйзчыт квюальизквюэ, аэквюы жкаывола мэль ку. Ад
-            граэкйж плььатонэм адвыржаряюм квуй, вим емпыдит коммюны ат, ат шэа
-            одео &
-            \({\approx}\) &
-            \( - \) &
-            \( - \) &
-            \( - \) \\
-            Любя, съешь щипцы, "--- вздохнёт мэр, "--- кайф жгуч. &
-            \( - \) &
-            \( + \) &
-            \( + \) &
-            \({\approx}\) \\
-            Нэ про натюм фюйзчыт квюальизквюэ, аэквюы жкаывола мэль ку. Ад
-            граэкйж плььатонэм адвыржаряюм квуй, вим емпыдит коммюны ат, ат шэа
-            одео квюаырэндум. Вёртюты ажжынтиор эффикеэнди эож нэ. &
-            \( + \) &
-            \( - \) &
-            \({\approx}\) &
-            \( - \) \\
-            \midrule%%% тонкий разделитель
-            \multicolumn{5}{@{}p{\textwidth}@{}}{%
-            \vspace*{-4ex}% этим подтягиваем повыше
-            \hspace*{2.5em}% абзацный отступ - требование ГОСТ 2.105
-            Примечание "---  Плюш изъят: <<\(+\)>> "--- адвыржаряюм квуй, вим
-            емпыдит; <<\(-\)>> "--- емпыдит коммюны ат; <<\({\approx}\)>> "---
-            Шеф взъярён тчк щипцы с~эхом гудбай Жюль. Эй, жлоб! Где туз?
-            Прячь юных съёмщиц в~шкаф. Экс-граф?
-            }
-            \\
-            \bottomrule %%% нижняя линейка
-        \end{tabulary}%
-    \end{SingleSpace}
-\end{table}
+Рассчитаем моменты в плоскости XY от каждого шатуна в системе координат платформы:
+\begin{equation}
+\label{eq:TorquesFromRodsInMovingCS}
+\begin{aligned}
+& E_{12}M_1^0 = E_{12}k_1\begin{pmatrix}
+-a-x_c \\ b-y_c \\ -z_c
+\end{pmatrix} \times S_1^0 = \\
+& = k_1\left\{
+\left[\begin{pmatrix}b \\ a\end{pmatrix} + 
+x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
+y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
+\right]S_{1,z}^0+z_c\begin{pmatrix}S_{1,y}^0 \\ -S_{1,x}^0\end{pmatrix}\right\} \\
+& E_{12}M_2^0 = E_{12}k_2\begin{pmatrix}
+-a-x_c \\ -b-y_c \\ -z_c
+\end{pmatrix} \times S_2^0 = \\
+& = k_2\left\{
+\left[\begin{pmatrix}-b \\ a\end{pmatrix} + 
+x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
+y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
+\right]S_{2,z}^0+z_c\begin{pmatrix}S_{2,y}^0 \\ -S_{2,x}^0\end{pmatrix}\right\} \\
+& E_{12}M_3^0 = E_{12}k_3\begin{pmatrix}
+c-x_c \\ -y_c \\ -z_c
+\end{pmatrix} \times S_3^0 = \\
+& = k_3\left\{
+\left[\begin{pmatrix}0 \\ c\end{pmatrix} + 
+x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
+y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
+\right]S_{3,z}^0+z_c\begin{pmatrix}S_{3,y}^0 \\ -S_{3,x}^0\end{pmatrix}\right\} \\
+\end{aligned}
+\end{equation}
 
-Если таблица~\cref{tab:test3} не помещается на той же странице, всё
-её~содержимое переносится на~следующую, ближайшую, а~этот текст идёт перед ней.
-\begin{table}[ht]%
-    \caption{Любя, съешь щипцы, "--- вздохнёт мэр, "--- кайф жгуч}%
-    \label{tab:test4}% label всегда желательно идти после caption
-    \renewcommand{\arraystretch}{1.6}%% Увеличение расстояния между рядами, для улучшения восприятия.
-    \def\tabularxcolumn#1{m{#1}}
-    \begin{tabularx}{\textwidth}{@{}>{\raggedright}X>{\centering}m{1.9cm} >{\centering}m{1.9cm} >{\centering}m{1.9cm} >{\centering\arraybackslash}m{1.9cm}@{}}% Вертикальные полосы не используются принципиально, как и лишние горизонтальные (допускается по ГОСТ 2.105 пункт 4.4.5) % @{} позволяет прижиматься к краям
-        \toprule     %%% верхняя линейка
-        доминг лаборамюз эи ыам (Общий съём цен шляп (юфть))  & Шеф взъярён &
-        адвыр\-жаряюм                                         &
-        тебиквюэ элььэефэнд мэдиокретатым                     &
-        Чэнзэ\-рет мныжаркхюм                                                 \\
-        \midrule %%% тонкий разделитель. Отделяет названия столбцов. Обязателен по ГОСТ 2.105 пункт 4.4.5
-        Эй, жлоб! Где туз? Прячь юных съёмщиц в~шкаф Плюш изъят.
-        Бьём чуждый цен хвощ!                                 &
-        \({\approx}\)                                         &
-        \({\approx}\)                                         &
-        \({\approx}\)                                         &
-        \( + \)                                                               \\
-        Эх, чужак! Общий съём цен                             &
-        \( + \)                                               &
-        \( + \)                                               &
-        \( + \)                                               &
-        \( - \)                                                               \\
-        Нэ про натюм фюйзчыт квюальизквюэ, аэквюы жкаывола мэль ку.
-        Ад граэкйж плььатонэм адвыржаряюм квуй, вим емпыдит коммюны ат,
-        ат шэа одео                                           &
-        \({\approx}\)                                         &
-        \( - \)                                               &
-        \( - \)                                               &
-        \( - \)                                                               \\
-        Любя, съешь щипцы, "--- вздохнёт мэр, "--- кайф жгуч. &
-        \( - \)                                               &
-        \( + \)                                               &
-        \( + \)                                               &
-        \({\approx}\)                                                         \\
-        Нэ про натюм фюйзчыт квюальизквюэ, аэквюы жкаывола мэль ку. Ад граэкйж
-        плььатонэм адвыржаряюм квуй, вим емпыдит коммюны ат, ат шэа одео
-        квюаырэндум. Вёртюты ажжынтиор эффикеэнди эож нэ.     &
-        \( + \)                                               &
-        \( - \)                                               &
-        \({\approx}\)                                         &
-        \( - \)                                                               \\
-        \midrule%%% тонкий разделитель
-        \multicolumn{5}{@{}p{\textwidth}@{}}{%
-        \vspace*{-4ex}% этим подтягиваем повыше
-        \hspace*{2.5em}% абзацный отступ - требование ГОСТ 2.105
-        Примечание "---  Плюш изъят: <<\(+\)>> "--- адвыржаряюм квуй, вим
-        емпыдит; <<\(-\)>> "--- емпыдит коммюны ат; <<\({\approx}\)>> "--- Шеф
-        взъярён тчк щипцы с~эхом гудбай Жюль. Эй, жлоб! Где туз? Прячь юных
-        съёмщиц в~шкаф. Экс-граф?
-        }
-        \\
-        \bottomrule %%% нижняя линейка
-    \end{tabularx}%
-\end{table}
+Запишем угловую скорость вращения платформы в подвижной системе координат. Положение произвольной точки $r$ в неподвижной СК определяется как $r^0 = R_xR_yr = Pr$. Тогда линейная скорость точек платформы $V = -\Omega\times\left(Pr\right) = \dot{P}r$. Равенство верно для любой точки $r$, поэтому справедлива замена $P^{-1}x$. Окончательно получим следующее выражение:
 
-\section{Таблицы с форматированными числами}\label{sec:ch3/formatted-numbers}
+\begin{equation}
+\label{eq:AngularSpeedFromLinear}
+\Omega \times x = -\dot{P} P^{-1} x ~~\forall x\in\Re^3
+\end{equation}
 
-В таблицах \cref{tab:S:parse,tab:S:align} представлены примеры использования опции
-форматирования чисел \texttt{S}, предоставляемой пакетом \texttt{siunitx}.
+Раскроем правую часть равенства \ref{eq:AngularSpeedFromLinear}:
 
-\begin{table}
-    \centering
-    \begin{threeparttable}% выравнивание подписи по границам таблицы
-        \caption{Выравнивание столбцов}\label{tab:S:parse}
-        \begin{tabular}{SS[table-parse-only]}
-            \toprule
-            {Выравнивание по разделителю} & {Обычное выравнивание} \\
-            \midrule
-            12.345                        & 12.345                 \\
-            6,78                          & 6,78                   \\
-            -88.8(9)                      & -88.8(9)               \\
-            4.5e3                         & 4.5e3                  \\
-            \bottomrule
-        \end{tabular}
-    \end{threeparttable}
-\end{table}
+\begin{equation}
+\label{eq:AngularSpeedTurnOperatorDiff}
+\begin{aligned}
+& \dot{P}P^{-1} = \left(\dot{R_x}R_y\dot{\alpha} + R_x\dot{R_y}\dot{\beta}\right)R_y^{-1}R_x^{-1}=\dot{\alpha}\dot{R_x}R_x^{-1} + \dot{\beta}R_x\dot{R_y}R_y^{-1}R_x^{-1}\\
+& \dot{R_x} = \begin{pmatrix}
+0 & 0 & 0\\
+0 & -\sin{\alpha} & \cos{\alpha}\\
+0 & -\cos{\alpha} & -\sin{\alpha}
+\end{pmatrix},\\
+& \dot{R_x}R_x^{-1} = \begin{pmatrix}
+0 & 0 & 0\\
+0 & 0 & 1\\
+0 & -1 & 0
+\end{pmatrix},~
+ \dot{R_y}R_y^{-1} = \begin{pmatrix}
+0 & 0 & -1\\
+0 & 0 & 0\\
+1 & 0 & 0
+\end{pmatrix}.
+\end{aligned}
+\end{equation}
 
-\begin{table}
-    \centering
-    \begin{threeparttable}% выравнивание подписи по границам таблицы
-        \caption{Выравнивание с использованием опции \texttt{S}}\label{tab:S:align}
-        \sisetup{
-            table-figures-integer = 2,
-            table-figures-decimal = 4
-        }
-        \begin{tabular}
-            {SS[table-number-alignment = center]S[table-number-alignment = left]S[table-number-alignment = right]}
-            \toprule
-            {Колонка 1} & {Колонка 2} & {Колонка 3} & {Колонка 4} \\
-            \midrule
-            2.3456      & 2.3456      & 2.3456      & 2.3456      \\
-            34.2345     & 34.2345     & 34.2345     & 34.2345     \\
-            56.7835     & 56.7835     & 56.7835     & 56.7835     \\
-            90.473      & 90.473      & 90.473      & 90.473      \\
-            \bottomrule
-        \end{tabular}
-    \end{threeparttable}
-\end{table}
+Окончательно, равенство \ref{eq:AngularSpeedTurnOperatorDiff2} преобразуется к виду:
 
-\section{Параграф \texorpdfstring{\cyrdash{}}{---} два}\label{sec:ch3/sect2}
-% Не все (xe|lua)latex совместимые шрифты умеют работать с русским тире "---
+\begin{equation}
+\label{eq:AngularSpeedTurnOperatorDiff2}
+\Omega x = \begin{pmatrix}
+0 & -\Omega_z & \Omega_y \\
+\Omega_z & 0 & -\Omega_x \\
+-\Omega_y & \Omega_x & 0
+\end{pmatrix}x = \begin{pmatrix}
+0 & -\dot{\beta}\sin{\alpha} & -\dot{\beta}\cos{\alpha} \\
+\dot{\beta}\sin{\alpha} & 0 & \dot{\alpha} \\
+\dot{\beta}\cos{\alpha} & -\dot{\alpha} & 0
+\end{pmatrix}x
+\end{equation}
 
-Некоторый текст.
+С учетом матрицы $E_{12}$ вектор угловых скоростей имеет вид: 
 
-\section{Параграф с подпараграфами}\label{sec:ch3/sect3}
+\begin{equation}
+\label{eq:AngularSpeedInMovingCS}
+E_{12}\Omega^0 = \begin{pmatrix}
+\Omega_x^0 \\ \Omega_y^0 \\ \Omega_z^0
+\end{pmatrix} = 
+E_{12}\begin{pmatrix}
+\dot{\alpha}\cos{\beta} \\ \dot{\beta} \\ -\dot{\alpha}\sin{\beta}
+\end{pmatrix} = 
+\begin{pmatrix}
+\dot{\alpha}\cos{\beta} \\ \dot{\beta}
+\end{pmatrix}
+\end{equation}
 
-\subsection{Подпараграф \texorpdfstring{\cyrdash{}}{---} один}\label{subsec:ch3/sect3/sub1}
+Уравнение моментов с учетом введенной в \ref{eq:AuxiliaryUnitMatrix} матрицы $E_{12}$ имеет вид:
+\begin{equation}
+\label{eq:TorquesEqCommon}
+E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = 
+E_{12}\left[M_1^0 + M_2^0 + M_3^0 + M_S^0\right]
+\end{equation}
 
-Некоторый текст.
+где $I$ – матрица моментов инерции платформы. Т.к. момент инерции записывается относительно центра тяжести, преобладающими являются диагональные компоненты:
+\begin{equation}
+I = \begin{pmatrix}
+I_x & 0 & 0 \\ 0 & I_y & 0 \\ 0 & 0 & I_z
+\end{pmatrix}
+\end{equation}
+Раскроем левую инерционную часть уравнения моментов \ref{eq:TorquesEqCommon}:
+\begin{equation}
+\label{eq:TorquesEqLeftInertialPart}
+E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \begin{pmatrix}I_x\ddot{\alpha}\cos{\beta} \\ I_y\ddot{\beta}\end{pmatrix} + 
+\begin{pmatrix}\left(I_x-I_y-I_z\right)\dot{\beta} \\ \left(I_z-I_x\right)\dot{\alpha}\cos{\beta}\end{pmatrix}\dot{\alpha}\sin{\beta}
+\end{equation}
 
-\subsection{Подпараграф \texorpdfstring{\cyrdash{}}{---} два}\label{subsec:ch3/sect3/sub2}
+Обозначим инерционные моменты $m_{\alpha}$ и $m_\beta$ для сокращения дальнейших выкладок:
+\begin{equation}
+\label{eq:TorquesInertial}
+\begin{aligned}
+& m_{\alpha} = I_x\ddot{\alpha}\cos{\beta} + \left(I_x-I_y-I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta} \\
+& m_{\beta} = I_y\ddot{\beta} + \left(I_z-I_x\right)\dot{\alpha}^2\sin{\beta}\cos{\beta}
+\end{aligned}
+\end{equation}
 
-Некоторый текст.
+После подстановки \ref{eq:TorqueFromCentralSupport}, \ref{eq:TorquesFromRodsInMovingCS} и \ref{eq:TorquesInertial} в \ref{eq:TorquesEqCommon}, совместно с \ref{eq:DynamicVerticalForcesEq2} получим систему алгебраических уравнений относительно неизвестных коэффициентов $k_1$, $k_2$, $k_3$, которые в данном случае имеют смысл модулей векторов сил, действующих на шатуны:
+\begin{equation}
+\label{eq:KoefsLinearSystem1}
+\left\{
+\begin{aligned}
+& F_1k_1 + F_2k_2 + F_3k_3 = \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right), \\
+& b\left(D_1k_1-D_2k_2\right)-Dky_c + S_y^0kz_c = \frac{1}{L}\left(m_{\alpha} + y_c\left(f_0 - k_sh\right)\right), \\
+& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_y^0kz_c = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right),
+\end{aligned}
+\right.
+\end{equation}
 
-\clearpage
+где $D=\left[D_1~D_2~D_3\right],~F=\left[F_1~F_2~F_3\right], k=\left[k_1~k_2~k_3\right]^T,~S^0_x=\left(S^0_{1,x},~S^0_{2,x},~S^0_{3,x}\right)/L, S^0_y=\left(S^0_{1,y},~S^0_{2,y},~S^0_{3,y}\right)/L$.
+
+Прибавим ко второму уравнению в \ref{eq:KoefsLinearSystem1} правую часть первого, умноженную на $y_c$, к третьему –-- ту же правую часть, умноженную на $–x$. При этом для левой части второго и третьего уравнений заменим данное слагаемое на $Fk$ согласно равенству в первом уравнении. Таким образом преобразованные второе и третье уравнения системы \ref{eq:KoefsLinearSystem1}:
+\begin{equation}
+\label{eq:KoefsLinearSystemSimplification}
+\begin{aligned}
+& b\left(D_1k_1-D_2k_2\right)-Dky_c + S_y^0kz_c + Fky_c = \frac{1}{L}\left(m_{\alpha} + y_c\left(f_0 - k_sh\right)\right) + \\ & \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)y_c, \\
+& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_y^0kz_c - Fkx_c = \\ & = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right) - \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)x_c,
+\end{aligned}
+\end{equation}
+
+В \ref{eq:KoefsLinearSystemSimplification} выделим $E=D-F$ –- вспомогательную переменную, характеризующую горизонтальные смещения центра тяжести.
+
+Упростив уравнение \ref{eq:KoefsLinearSystemSimplification}, вместе с первым уравнением  \ref{eq:KoefsLinearSystem1} получим преобразованную систему линейных уравнений относительно $k$:
+
+\begin{equation}
+\label{eq:KoefsLinearSystem2}
+\begin{aligned}
+& \begin{pmatrix}
+F_1 & F_2 & F_3 \\ 
+bD_1 & -bD_2 & 0 \\
+aD_1 & aD_2 & -cD_3
+\end{pmatrix}k + 
+\begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}kz_c +
+\begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}Ek = \frac{1}{L} 
+\begin{pmatrix}
+m\ddot{h} \\
+m_{\alpha} \\
+m_{\beta}	
+\end{pmatrix} + \\ 
+& + \frac{1}{L}\begin{pmatrix}
+k_sh - f_0 + mg \\
+y_c(m\ddot{h} + mg) \\
+-x_c(m\ddot{h} + mg)
+\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+Далее расчет коэффициентов $k$ осуществляется численно методом простых итераций.
+
+Окончательно, получим формулы для определения вращающих моментов, составив уравнения для каждого кривошипа:
+\begin{equation}
+\label{eq:TorquesFromCrankAngles}
+Q_i  = \begin{pmatrix}
+0 \\ R\sin{q_i} \\ -R\cos{q_i}
+\end{pmatrix} \times
+\left(k_iS_i\right)
+\end{equation}
+
+После подстановки $S_i$ в \ref{eq:TorquesFromCrankAngles} получим формулы для моментов относительно рассчитанных значений $k_i$ :
+\begin{equation}
+\label{eq:TorquesFromCrankAnglesDetailed}
+\begin{aligned}
+& Q_i = k_iG_i,~i=1,\dots,3 \\
+& G_1 = R \left\{ L\sin{q_1}-R\sin{q_1}\cos{q_1}-R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_1} + \frac{1}{2L}\sin^3{q_1} \right] \right. +\\ 
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right) 
+\right\} \\
+& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}-R^2 \left[ \frac{2}{8b} {\left( \cos{q_2}-\cos{q_2} \right)}^2 \cos{q_2} + \frac{2}{2L}\sin^3{q_2} \right] \right. +\\ 
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_2}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_2}\cos{q_2}\right) 
+\right\} \\
+& G_3 = R\left\{L\sin{q_3}-R\sin{q_3}\cos{q_3}-R^2\frac{1}{2L}\sin^3q_3\right\}
+\end{aligned}
+\end{equation}
+
+\section{Исследование решения линейной системы относительно неизвестных сил реакции шатунов}
+
+\subsection{Обращение матрицы линейной системы}
+Матрица системы \ref{eq:LinearSystemStatic}:
+\begin{equation}
+\begin{aligned}
+	A_0 = 
+	\begin{pmatrix}
+	F_1 & F_2 & F_3 \\
+	bD_1 & -bD_2 & 0 \\
+	aD_1 & aD_2 & -cD_3
+	\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+обращается явно:
+\begin{equation}
+\begin{aligned}
+	A_0^{-1} = \frac{1}{\Delta_0}\begin{pmatrix}
+	bcD_2D_3 & cD_3F_2 + aD_2F_3 & bD_2F_3 \\
+	bcD_1D_3 & -aD_1F_3-cD_3F_1 & bD_1F_3 \\
+	2abD_1D_2 & a\left(D_1F_2-D_2F_1\right) & -b\left(D_1F_2 + D_2F_1\right)
+\end{pmatrix}	 
+\end{aligned}
+\end{equation}
+
+где определитель матрицы $A_0$ равен
+\begin{equation}
+	\Delta_0 = 2abD_1D_2F_3 + bcD_3\left(D_1F_2 + D_2F_1\right)
+\end{equation}
+
+Для решения системы применим метод простой итерации. Запишем уравнения в виде:
+
+\begin{equation}
+\begin{aligned}
+	A_0k + Hk = B, ~ H = \begin{pmatrix}0 \\ S_y^0 \\ -S_x^0 \end{pmatrix}z_c + \begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}E
+\end{aligned}
+\end{equation}
+
+Пусть спектральный радиус $\rho\left(A_0^{-1}H\right) < 1$. Тогда решение можно представить в виде ряда:
+
+\begin{equation}
+\begin{aligned}
+	k & = \left(A_0 + H\right)^{-1}B = A_0^{-1}\left(I + HA_0^{-1}\right)^{-1}B \\ 
+	&= A_0^{-1}\sum_{i=0}^{\inf}\left(-HA_0^{-1}\right)^i B = A_0^{-1}\left(\sum_{i=0}^{\inf}C^i\right)B,
+\end{aligned}
+\end{equation}
+
+где 
+
+\begin{equation}
+\begin{aligned}
+	C = -H A_0^{-1} = \begin{pmatrix}0 \\ S_y^0 \\ -S_x^0 \end{pmatrix}A_0^{-1}z_c + \begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}EA_0^{-1}
+\end{aligned}
+\end{equation}
+
+Второе слагаемое мало, т.к. величина $E$ пропорциональна $\kappa^2$, а смещение $x_c,~y_c$ составляют сотые доли метра. Первое слагаемое рассчитывается в следующем разделе.
+
+Особый интерес представляет аппроксимация ряда частичной суммой первого или второго порядка:
+
+\begin{equation}
+\begin{aligned}
+	\hat{k}^{(1)} = A_0^{-1}B + A_0^{-1}CB, ~~ \hat{k}^{(2)} = A_0^{-1}B + A_0^{-1}CB  + A_0^{-1}C^2B
+\end{aligned}
+\end{equation}
+
+Запишем матрицу $C$ в виде:
+
+\begin{equation}
+\begin{aligned}
+	C = -C_0z_c - \begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}EA_0^{-1}, ~C_0 = \begin{pmatrix}0 \\ S_y^0 \\ -S_x^0 \end{pmatrix}A_0^{-1}
+\end{aligned}
+\end{equation}
+
+Назовем $C$ матрицей итераций.
+
+\subsection{Расчет матрицы итераций}
+
+Введем обозначение для нормированного определителя матрицы $A_0$:
+\begin{equation}
+\begin{aligned}
+	\Delta = \Delta/b = 2aD_1D_2F_3 + cD_3\left(D_1F_2 + D_2F_1\right)
+\end{aligned}
+\end{equation}
+
+и для столбцов нормированной присоединенной матрицы $A_1 = \Delta A_0^{-1}e_1,~A_2 = \Delta A_0^{-1}e_2,~A_3 = \Delta A_0^{-1}e_3$:
+
+\begin{equation}
+\begin{aligned}
+	A_1 = \begin{pmatrix}cD_2D_3 \\ cD_1D_3 \\ 2aD_1D_2\end{pmatrix},~ A_2 = \frac{1}{b}\begin{pmatrix}cD_3F_2 + aD_2F_3 \\ -aD_1F_3-cD_3F_1 \\ a\left(D_1F_2-D_2F_1\right)\end{pmatrix}, ~A_3=\begin{pmatrix}D_2F_3 \\ D_1F_3 \\ -\left(D_1F_2 + D_2F_1\right) \end{pmatrix}
+\end{aligned}
+\end{equation}
+
+Вычислим каждый столбец в матрице:
+
+\begin{equation}
+\begin{aligned}
+	C_0 = \begin{pmatrix}0 \\ S_y^0 -S_x^0\end{pmatrix}A_0^{-1} = \frac{1}{\Delta}\begin{pmatrix}
+	0 & 0 & 0 \\ S_y^0A_1 & S_y^0A_2 & S_y^0A_3 \\ -S_x^0A_1 & -S_x^0A_2 & -S_x^0A_3
+	\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+С точностью до третьего порядка:
+
+\begin{equation*}
+	\begin{aligned}
+		\frac{1}{\Delta}\begin{pmatrix}S_y^0A_1 \\ -S_x^0\end{pmatrix} & = \frac{2\left(a+c\right)}{\Delta}\left\lbrace\begin{pmatrix}\sin\alpha\cos\beta \\ \sin\beta\end{pmatrix}- \right.\\
+		& \left. -\kappa\begin{pmatrix}1\\0\end{pmatrix}\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)}\left(\cos\alpha-\kappa^2C_{1,\beta}^2\right) - \right.\\
+		& \left. -\frac{1}{2}\kappa^2 \begin{pmatrix} \sin{\alpha} \\ \sin{\beta} \end{pmatrix} \frac{2a\sin^2{q_3}+c\left(\sin^2{q_1}+\sin^2{q_2}\right)}{2\left(a+c\right)}-\kappa^2 \begin{pmatrix} \sin{\alpha} \\ 0 \end{pmatrix} C^2_{1,\beta} + \right.\\
+		& \left. \frac{1}{2} \kappa^3 \begin{pmatrix} 1 \\ 0 \end{pmatrix} \frac{2asq_3 \left(sq_1^2+sq_2^2 \right) + csq_1\left( sq_2^2+sq_3^2 \right) + csq_2\left(sq_1^2+sq_3^2\right)}{2\left(a+c\right)} \right\rbrace\\
+		 S_y^0 A_2 & \approx -\kappa \frac{a+c}{b} \left( \sin{q_1} - \sin{q_2} \right) \left\lbrace 1 + \frac{1}{2} \kappa^2 \left(4\lambda - C^2_{1,\beta} + \sin{q_1} \sin{q_2} - \sin^2{q_3}\right) \right\rbrace -\\
+		& -\kappa^2\frac{a+c}{L}C_{1,\alpha}\\
+		S_y^0 A_3 & \approx \kappa\left(2\sin{q_3} - \sin{q_1} - \sin{q_2}\right) \left(1 - \frac{1}{2}\kappa^2\left(C^2_{1,\alpha} + C^2_{1,\beta}\right)\right) + \\
+		& + \frac{1}{2}\kappa^3 \left\lbrace \sin{q_1}\left(\sin^2{q_3} + sq^2_2\right) + \sin{q_2}\left(\sin^2{q_3} + sq^2_1\right)\right.\\
+		&\left. -\sin{q_3}\left(\sin^2{q_1} + \sin^2{q_2} + sq^2_1 + sq^2_2\right)\right\rbrace
+		S^0_x A_2 & \approx \frac{1}{2b}\kappa^3 C_{1,\beta}c\left(\sin^2{q_2} - \sin^2{q_1}\right) \\
+		S^0_x A_3 & \approx \frac{1}{2}\kappa^3 C_{1,\beta}\left(2\sin^2{q_3} - \sin^2{q_1} - \sin^2{q_2}\right) + \kappa^2\frac{a+c}{L}C^2_{1,\beta} + \\
+		& + \kappa^2\frac{a+c}{L}\left(C^2_{1,\beta} + 2\kappa C_{1,\beta}C_{2,\beta}\right)
+	\end{aligned} 
+\end{equation*}
+
+Т.к. $\kappa^3$ является малой величиной и умножается на линейную комбинацию тригонометрических функций, компонентами матрицы итераций, содержащими $\kappa^3$ можно пренебречь. Запишем матрицу итераций до второго порядка $\kappa$:
+
+\begin{equation}
+\begin{aligned}
+	C_0 & \approx \frac{2\left(a+c\right)}{\Delta}\left\lbrace \begin{pmatrix}
+	0 & 0 & 0 \\ \sin{\alpha}\cos{\beta} & 0 & 0 \\ \sin{\beta} & 0 & 0
+	\end{pmatrix} + \right.\\
+	&\left. + k\begin{pmatrix}
+	0 & 0 & 0 \\
+	-\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)} & \frac{\sin{q_2}-\sin{q_1}}{2b} & \frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{2\left(a+c\right)}\\	
+	0 & 0 & 0 \\
+	\end{pmatrix} - \right.\\
+	& \left.\frac{1}{2L}\kappa^2\begin{pmatrix}
+	0 & 0 & 0 \\
+	0 & C_{1,\alpha} & 0 \\
+	0 & 0 & C^2_{1,\beta}
+	\end{pmatrix}\right\rbrace
+\end{aligned}
+\end{equation}
+ Определитель $\Delta$ отличается от $2\left(a+c\right)$ на величину порядка $\kappa^2$. При возведении в квадрат матрицы $z_cC_0$ умножаются на 0 все элементы первого столбца. Множитель $\kappa^2$ останется только в центральном элементе:
+ 
+\begin{equation}
+\begin{aligned}
+	\kappa^2\left(\frac{2\left(a+c\right)}{\Delta}\right)^2 \frac{z^2_c}{\left(2b\right)^2}\left(\sin{q_2} - \sin{q_1}\right)
+\end{aligned}
+\end{equation}
+
+которым, как правило можно пренебречь.
+	
+Поэтому одна итерация в решении системы линейных уравнений дает неплохую аппроксимацию решения.
+
+\subsection{Слагаемое с горизонтальным смещением центра тяжести}
+
+Второе слагаемое в матрице итераций $C$ содержит произведение вектора из смещений $x_cy_c$ на коэффициент $EA_0^{-1}$, где $E = D - F$.
+
+Оценим компоненты строки $E = \left(E_1,~E_2,~E_3\right)$. При $i=1,2,3$:
+
+\begin{equation}
+\begin{aligned}
+	E_i & \approx \frac{1}{2}\kappa^2 \left(-q^2_i - C^2_{1,\beta} + \sin^2_{q_i}\right) + \kappa^3 \left\lbrace C_{1,\beta}\gamma_i + sq_i\delta_i + \frac{b_i}{2L}\sin{q_i}C^2_{1,\alpha} \right\rbrace \\
+	& + \kappa^2\left[C_{1,\alpha}\sin{q_i} - \frac{1}{2}\left(C^2_{1,\alpha} + C^2_{1,\beta}\right)\right] + \\
+	& + \kappa^3\left\lbrace C_{2,\alpha}\sin{q_i} + \frac{a}{2L}C^3_{1,\beta} - \left(C_{1,\beta}C_{2,\beta} + C_{1,\beta}C_{2,\alpha}\right)\right\rbrace
+\end{aligned}
+\end{equation},
+
+где $b_i$ обозначает следующее: $b_1 = b,~b_2 = -b,~0$. Компоненты строки $E$ имеют второй порядок относительно величины $\kappa$.
+
+Оценим каждую компоненту коэффициента $EA^{-1}_0$. Первая компонента:
+\begin{equation}
+\begin{aligned}
+EA^{-1}_0e_1 \approx & \kappa^2\left[\left(C_{1,\alpha} + \kappa C_{2,\alpha} - \kappa^2 C^2_{1,\beta}\right)\frac{2a\sin{q_3} + c\left(\sin{q_1} + \sin{q_2}\right)}{\Delta} - \right.\\
+&\left. - \frac{a+c}{\Delta}\left(C^2_{1,\alpha} + C^2_{1,\beta}\right)\left(1 - \kappa^2 C^2_{1,\beta}\right)\right] + \\
+& + \kappa^3\frac{2\left(a+c\right)}{\Delta} \left[\frac{a}{2L}C^3_{1,\beta} - \left(C_{1,\beta}C_{2,\beta} + C_{1,\alpha}C_{2,\alpha}\right)\right] + \\
+& + \frac{1}{2}\kappa^4\left[ \frac{1}{2}\left(C^2_{1,\alpha} + C^2_{1,\beta}\right) \frac{2a\left(sq^2_1 + sq^2_2\right) + c\left(q^2_1 + q^2_2 + 2q^2_3\right)}{\Delta}\right. \\
+& -\left. \frac{2a\sin{q_3}\left(q^2_1 + q^2_2\right) + c\sin{q_1}\left(q^2_2 + q^2_3\right) + c\sin{q_2}\left(q^2_1 + q^2_3\right)}{\Delta} \right]
+\end{aligned}
+\end{equation}
+
+Вторая компонента:
+\begin{equation}
+\begin{aligned}
+EA^{-1}_0 e_2 & = \frac{1}{\Delta}A_2 = \frac{a+c}{\Delta b}D_3\left(D_1F_2 - D_2F_1\right) \approx\\
+& \approx \frac{2\left(a+c\right)}{\Delta}\kappa^2D_3C_{1,\alpha}\left\lbrace \frac{\sin{q_1} - \sin{q_2}}{2b}\left(1 - \frac{1}{2}\kappa C_{2,\alpha}\right) + \kappa \frac{1}{4L}\left(2C^2_{1,\beta} + C^2_{1,\alpha}\right)\right\rbrace.
+\end{aligned}
+\end{equation}
+
+Третья компонента:
+\begin{equation}
+\begin{aligned}
+EA^{-1}_0 e_3 & \approx -\kappa\sin{\alpha}\cos^2{\beta}\frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{\Delta} - \\
+& -\frac{1}{2\Delta}\kappa^4 \left\lbrace -\frac{1}{2}C^2_{1,\beta}\left(2\sin^2{q_3} - \sin^2_{q_1} - \sin^2{q_2}\right) \right. \\
+& \left. -C^2_{1,\alpha}\left(\sin{q_3} - \sin{q_1}\right)\left(\sin{q_3} - \sin{q_2}\right)\right. \\
+& \left. +C_{1,\alpha}\left(\sin{q_1} - \sin{q_3}\right)\left(sq^2_2 - \sin{q_1}\sin{q_3}\right)\right. \\
+& \left. -C_{1,\alpha}\left(\sin{q_2} - \sin{q_3}\right)\left(sq^2_1 - \sin{q_2}\sin{q_3}\right)\right\rbrace
+\end{aligned}
+\end{equation}
+
+
+\section{Оценка параметров уравнений обратной задачи динамики}
+Практически все параметры в (10) определить на практике с достаточной точностью не представляется возможным из-за сложностей в организации процесса измерения. В связи с этим, целесообразно произвести параметрическую идентификацию, используя данные с датчиков, установленных на СП.
+
+\subsection{Идентификация параметров в статике}
+Параметрами, в большей степени влияющими на результат расчета движущих моментов являются вес закрепленного на платформе объекта, коэффициент жесткости $k_s$, начальное натяжение пружины $f_0$ и смещение центра тяжести $(x_c, y_c, z_c)$. Эти величины не меняются в течение длительного времени, поэтому целесообразно произвести идентификацию объекта на основе данных эксперимента.
+	Данные параметры можно определить в статическом режиме, т.е. измерив вращающие моменты в нескольких стационарных положениях платформы. При этом уравнения системы (11) путем обнуления производных принимают вид:
+\begin{equation}
+\label{eq:LinearSystemStatic}
+\begin{aligned}
+& \begin{pmatrix}
+\bar{F_1} & \bar{F_2} & \bar{F_3} \\ 
+\bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
+\bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
+\end{pmatrix}\bar{k} + 
+\begin{pmatrix}0 \\ \bar{S}_y^0z_c -y_c\bar{E} \\ -\bar{S}_x^0z_c+x_c\bar{E}\end{pmatrix}\bar{k} = \frac{1}{L} 
+\begin{pmatrix}
+k_s\bar{h} - f_0 + mg \\
+y_cmg \\-x_cmg
+\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+Переменные с чертой в \ref{eq:LinearSystemStatic} обозначают константы, рассчитанные по данным эксперимента или полученные из исходных данных, без черты – идентифицируемые параметры.
+
+Введем дополнительные расчетные величины, которые в \ref{eq:LinearSystemStatic} не зависят от идентифицируемых параметров:
+\begin{equation}
+\label{eq:AdditionalEstimatedVariables}
+\begin{pmatrix}
+\bar{p_1} \\ \bar{p_2} \\ \bar{p_3} 
+\end{pmatrix} = 
+\begin{pmatrix}
+\bar{F_1} & \bar{F_2} & \bar{F_3} \\ 
+\bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
+\bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
+\end{pmatrix}\bar{k} 
+\end{equation}
+
+Тогда после подстановки \ref{eq:AdditionalEstimatedVariables} в \ref{eq:LinearSystemStatic} получим:
+\begin{equation}
+\label{eq:AdditionalParamsRightPart}
+\begin{aligned}
+& \bar{p_1} = \frac{1}{L}\left(mg - f_0 + k_sh\right)\\
+& \bar{p_2} = \left(\frac{mg}{L}+\bar{E}\bar{k}\right)y_c - \bar{S}^0_y\bar{k}z_c \\
+& \bar{p_3} = \left(\frac{mg}{L}+\bar{E}\bar{k}\right)x_c + \bar{S}^0_x\bar{k}z_c
+\end{aligned}
+\end{equation}
+
+Пусть по результатам эксперимента были получены n стационарных положений платформы. Т.к. в процессе эксперимента вращающие моменты $Q_1,~Q_2,~Q_3$ измеряются, а $G_1,~G_2,~G_3$ рассчитываются по кинематическим уравнениям, вычисляется вектор $k$ путем решения системы (11) методом простых итераций. Далее на каждом из участков по формуле (18) вычисляются значения  $p_{1,i},~p_{2,i},~p_{3,i},~i = 1,\dots,n$.
+
+Вместо величин $\left(x_c, y_c\right)$ определяются сразу произведения $\left(x_c, y_c\right) = \left(x_c, y_c\right) mg/L$.
+
+Для определения параметров используется метод наименьших квадратов с дополнительными весовыми множителями [3]:
+
+\begin{equation}
+\label{eq:LeastSquareMethodFormulation}
+\begin{aligned}
+& J_c\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
+c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}-\left(\bar{S}_y^0\bar{k}\right)_iz_c  \bar{y_c}\right|^2\right], \\
+& J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, \\
+& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\ 
+& J_c\left(k_s,~f_0\right)\rightarrow\min.
+\end{aligned}
+\end{equation}
+
+где $c_{i,x}$ и $c_{i,y}$  – весовые множители, $i = 1,\dots,n$ – номера стационарных участков.
+
+\subsection{Идентификация в режиме гармонических колебаний}
+Предположим, что в записи имеются несколько участков, на которых углы крена и тангажа меняются периодически. Экспериментально установлено, что среди инерциальных моментов сил только чистые вторые производные от углов крена и тангажа могут принимать значения, влияющие на общий суммарный момент сил. Это значит, что:
+
+\begin{equation}
+\begin{aligned}
+m_{s,\alpha} & \approx 0,\\
+m_{s,\beta} & \approx 0,\\
+\left(I_y - I_x - I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta} & \approx 0,\\
+\left(I_z - I_x\right)\dot{\alpha}^2 \sin{\beta}\cos{\beta} & \approx 0.
+\end{aligned}
+\end{equation}
+
+Наиболее значимый вклад вносит компонента $\begin{pmatrix}0 & I_x\ddot{\alpha}\cos{\beta} & I_y \ddot{\beta} \end{pmatrix}^T$. 
+
+Поскольку смещения центра тяжести и параметры сил оценены по стационарным участкам, в каждый момент времени коэффициенты сил $k$ можно представить в виде:
+\begin{equation}
+\begin{aligned}
+	k = k_0 + k_{\alpha} + k_{\beta}
+\end{aligned}
+\end{equation}
+
+где 
+$k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}\cos{\beta}\end{pmatrix},~k_{\beta}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ 0 \\ I_y\ddot{\alpha}\cos{\beta}\end{pmatrix},~$
+
+и
+
+\begin{equation}
+\begin{aligned}
+	A & = \begin{pmatrix}F_1 & F_2 & F_3 \\ bD_1 & -bD_2 & 0 \\ aD_1 & aD_2 & -cD_2\end{pmatrix}+
+	\begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}z_c + \begin{pmatrix}0 \\ -y_c \\ x_c\end{pmatrix}E, \\
+	B &= \begin{pmatrix}
+	\frac{1}{L}m\ddot{h} + \frac{1}{L}k_sh + \bar{f}\\
+	\bar{y_c}\left(\ddot{h}/g + 1\right) \\
+	-\bar{x_c}\left(\ddot{h}/g + 1\right)
+	\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+Оценка моментов сил на валах кривошипов раскладывается на три компоненты:
+
+\begin{equation}
+\begin{aligned}
+	m = m_0 + m_{\alpha} + m_{\beta},~m_0 = Gk_0,~m_{\alpha} = Gk_{\alpha},~m_{\beta} = Gk_{\beta}
+\end{aligned}
+\end{equation}
+
+На каждом однородном участке колебаний с постоянной частотой это простые гармоники. При помощи БПФ определяется частота $F$ простых гармоник вращающих моментов. Величина $F$ измеряется в количестве периодов на длину выбранного участка сигнала $N$.
+Далее определяются комплексные амплитуды этих гармоник:
+
+\begin{equation}
+\begin{aligned}
+	m_0(t) = \operatorname{Re}\left(A_0 \exp{\frac{2\pi i}{N}Ft}\right),\\
+	m_{\alpha}(t) = \operatorname{Re}\left(A_{\alpha} \exp{\frac{2\pi i}{N}Ft}\right),\\
+	m_{\beta}(t) = \operatorname{Re}\left(A_{\beta} \exp{\frac{2\pi i}{N}Ft}\right).
+\end{aligned}
+\end{equation}
+
+Каждая амплитуда $A_0, A_{\alpha}, A_{\beta}$ имеет 3 компоненты, соответствующие кривошипам. Аналогично выделяется первая гармоника измеряемой функции моментов на валах $m_{obs}$. Вектор её амплитуд обозначим $A_{obs}$. Неточно известны множители, с которыми линейные и угловые ускорения влияют на моменты на валах. Это масса кабины m и её моменты инерции $I_x$ и $I_y$. Однако влияние линейных ускорений $h$ на порядок меньше, чем угловых ускорений. Поэтому вместо $m$ можно подставить приблизительную оценку этой величины. Рассмотрим задачу настройки параметров $I_x$ и $I_y$. В измерениях $m_{obs}(t)$ возможны запаздывания, которые проявляются в изменении фазы в комплексной амплитуде $A_{obs}$. Поскольку смещение фазы неизвестно, то настройку будем проводить только по вещественным амплитудам гармоник. Пусть $i = 1,\ldots,n$ — номера участков сигнала с гармоническим изменением углов кривошипов. Определим функционал качества:
+
+\begin{equation}
+\begin{aligned}
+	J\left(c_x,c_y\right) = \sum^n_{i=1}\left(\|A_{obs,i}\|^2 - \|A_{0,i} + c_xA_{\alpha,i} + c_yA_{\beta,i}\|^2\right)^2
+\end{aligned}
+\end{equation}
+
+Этот функционал минимизируется по $\left(c_x, c_y\right)$ градиентным методом. При расчете предварительно задаются границы $c_{\min},~c_{\max}$ допустимых отклонений коэффициентов от 1.
+
+После того, как коэффициенты настроены, получаем оценки комплексных амплитуд гармоник моментов на валах:
+
+\begin{equation}
+\begin{aligned}
+	\hat{A}_i = A_{0,i} + c_xA_{\alpha,i} + c_yA_{\beta,i},~i=1,\ldots,n
+\end{aligned}
+\end{equation} 
+
+Для каждого $i$ это трехмерный вектор с компонентами, относящимися к каждому кривошипу.
+Результаты идентификации, приведенные в главе 6, показывают, что измерения имеют существенное запаздывание по фазе, зависящие от частоты.
+%
+%По результатам идентификации для платформы с исходными данными $a = 0,25 м; b = 0,4 м; c = 0,5 м; R = 0,15 м; L = 0,56 м$ были определены следующие параметры модели:
+%\begin{equation}
+%\begin{aligned}
+%	....
+%\end{aligned}
+%\end{equation}
+
+\section{Динамическая ограничительная характеристика}
+
+Для большинства типовых имитационных эффектов движения, характерных для тренажеров АТ и СТ, компоненты движущих моментов, зависящие от угловых и поступательных скоростей и ускорений, оказывают меньшее влияние на результирующие моменты по сравнению со статическими компонентами. Таким образом, для оценки достижимости положений при планировании траектории в первую очередь необходимо построить ограничительную статическую характеристику, которая будет оказывать максимальное влияние на работоспособность системы. Однако данная статическая характеристика должна уточняться с учетом мощностных характеристик используемых двигателей. В результате чего, ее конечный вид будет определяться суперпозицией двух характеристик (статической и механической двигателей).
+
+\begin{figure}[ht]
+    \center{
+        %\hfill
+        \subcaptionbox[List-of-Figures entry]{\label{img:dyn_restrict_Q800}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q800}}%
+        \hfill       
+        \subcaptionbox{\label{img:dyn_restrict_Q600}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q600}}
+        \hfill
+    }
+    \center{
+        \subcaptionbox[List-of-Figures entry]{\label{img:dyn_restrict_Q500}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q500}}
+        \hfill
+        \subcaptionbox[List-of-Figures entry]{\label{img:dyn_restrict_Q350}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q350}}
+        \hfill
+    }
+    \caption{Динамическая ограничительная характеристика 3DOF СП в декартовых координатах} % Этот текст попадает в названия рисунков в списке рисунков
+    \label{img:dyn_restrict_static}
+\end{figure}
+
+На рис. 2(а) проиллюстрирована ограничительная характеристика для платформы с параметрами $a = 0,25 \text{м}; b = 0,4 \text{м}; c = 0,5 \text{м}; R = 0,15 \text{м}; L = 0,56 \text{м}$ при установленном ограничении на движущие моменты 100\% от номинального электромагнитного момента используемых мотор-редукторов. 
+Рабочая зона представлена в виде проекции параллелепипеда на плоскость «крен-тангаж», допустимые высоты в метрах выделены цветом в соответствии со шкалой в правой части рисунка.  
+На рис. 2(б) показана рабочая зона с установленным ограничением 50\% от номинального момента. Как видно по срезам рабочей зоны, некорректный выбор двигателей или превышение допустимой нагрузки на двигатели может существенно ограничить допустимые перемещения платформы даже в статическом режиме. Наличие срезов характеристики объясняется неравномерностью распределения нагрузки на двигатели (все кривошипы работают в одной полуплоскости) и несимметричностью расположения двигателей 1 и 2 по сравнению с двигателем 3 вдоль оси Х.
+
+В ходе экспериментов с динамической моделью была также выявлена существенная зависимость значений моментов от величины подъема центра тяжести относительно подвижной платформы.
