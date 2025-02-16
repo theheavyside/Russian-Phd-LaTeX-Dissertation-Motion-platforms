@@ -96,8 +96,8 @@
  
 \begin{figure}[ht!]
 	\center
-	\includegraphics[width=0.75\textwidth]{3dof_kinematics_scheme_dynamic}
-	\caption{Кинематическая схема подвижности 3DOF}
+	\includegraphics[width=0.65\textwidth]{3dof_kinematics_scheme_dynamic}
+	\caption{Расчётная силовая схема подвижности 3DOF}
 	\label{img:3dof_dynamic_scheme}
 \end{figure}
 
@@ -165,18 +165,19 @@ y_c(m\ddot{h} + mg) \\
 
 Т.к. большинство параметров уравнений динамики на практике известны неточно, была произведена идентификация по следующей схеме. 
 
-Пусть по результатам эксперимента были получены $n$ стационарных положений платформы. Т.к. в процессе эксперимента вращающие моменты $Q_1,~Q_2,~Q_3$ измеряются, а $G_1,~G_2,~G_3$ рассчитываются по кинематическим уравнениям, вычисляется вектор $k$ путем решения системы \ref{eq:KoefsLinearSystem2} методом простых итераций. Далее определяются вспомогательные параметры $p_i$.. 
+\vspace{-0pt}
+Пусть по результатам эксперимента были получены $n$ стационарных положений платформы. 
 
-Для определения параметров используется метод наименьших квадратов с дополнительными весовыми множителями:
+Т.к. в процессе эксперимента вращающие моменты $Q_1,~Q_2,~Q_3$ измеряются, а $G_1,~G_2,~G_3$ рассчитываются по кинематическим уравнениям, вычисляется вектор $k$ путем решения системы \ref{eq:KoefsLinearSystem2} методом простых итераций. 
+
+Далее определяются вспомогательные параметры $p_i$.. Для определения параметров используется метод наименьших квадратов с дополнительными весовыми множителями:
 
 \begin{equation}
 \label{eq:LeastSquareMethodFormulation}
 \begin{aligned}
 & J_c\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
 c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}-\left(\bar{S}_y^0\bar{k}\right)_iz_c  \bar{y_c}\right|^2\right], \\
-& J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, \\
-& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\ 
-& J_c\left(k_s,~f_0\right)\rightarrow\min.
+& J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, J_c\left(k_s,~f_0\right)\rightarrow\min.
 \end{aligned}
 \end{equation}
 
@@ -286,7 +287,12 @@ c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\righ
 
 В \underline{\textbf{шестой главе}} приведены результаты экспериментов, проведенных на 3DOF платформе подвижности с целью проверки корректности решения задач кинематики и динамики, определения динамических характеристик платформы.
 
-На рисунке \ref{img:identificationSines} показаны результаты исследования адекватности модели \ref{eq:TorquesFromCrankAnglesDetailed}. 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{identificationSines}
+    \caption{Тестирование модели СП в динамике}
+    \label{img:identificationSines}
+\end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -295,16 +301,11 @@ c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\righ
     \label{img:identificationStatic}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.9\linewidth]{identificationSines}
-    \caption{Тестирование модели СП в динамике}
-    \label{img:identificationSines}
-\end{figure}
+На рисунке \ref{img:identificationSines} показаны результаты исследования адекватности модели \ref{eq:TorquesFromCrankAnglesDetailed}. 
 
 Пунктирными линиями показаны измеренные значения моментов, сплошными – расчетные. Максимальное запаздывание расчетных данных по фазе относительно экспериментальных составило порядка 40 градусов. 
+
 Расхождения между моделью и экспериментом объясняются задержками в канале передачи данных между частотными преобразователями и контроллером движения, а также особенностями работы внутренних контуров регулирования АД.
-В дальнейших исследованиях предполагается использовать более высокоскоростной интерфейс передачи данных и изменить схему проведения эксперимента.
 
 В \underline{\textbf{заключении}} приведены основные результаты работы, которые состоят в следующем:
 \begin{itemize}
@@ -321,7 +322,7 @@ c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\righ
 \end{itemize}
 Результаты работы могут быть обобщены на другие типы кинематических схем систем подвижности и использоваться в алгоритмах управления при необходимости учета динамических характеристик объекта, закрепленного на подвижном основании СП.
 
-
+\newpage
 \ifdefmacro{\microtypesetup}{\microtypesetup{protrusion=false}}{} % не рекомендуется применять пакет микротипографики к автоматически генерируемому списку литературы
 \urlstyle{rm}                               % ссылки URL обычным шрифтом
 \ifnumequal{\value{bibliosel}}{0}{% Встроенная реализация с загрузкой файла через движок bibtex8
@@ -339,31 +340,22 @@ c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\righ
     \nocite{vakbib1}%
     \nocite{vakbib2}%
     \nocite{vakbib3}%
-    \nocite{vakbib4}%
-    \nocite{vakbib5}%
-    \nocite{vakbib6}%
-    \nocite{vakbib7}%
-    \nocite{vakbib8}%
-    \nocite{vakbib9}%
-    \nocite{vakbib10}%
-    \nocite{vakbib11}%
-    \nocite{vakbib12}%
     %
     %% authorwos
-    \nocite{wosbib1}%
+    % \nocite{wosbib1}%
     %
     %% authorscopus
-    \nocite{scbib1}%
+    % \nocite{scbib1}%
     %
     %% authorpatent
-    \nocite{patbib1}%
+    % \nocite{patbib1}%
     %
     %% authorprogram
-    \nocite{progbib1}%
+    % \nocite{progbib1}%
     %
     %% authorconf
     \nocite{confbib1}%
-    \nocite{confbib2}%
+    % \nocite{confbib2}%
     %
     %% authorother
     \nocite{bib1}%
