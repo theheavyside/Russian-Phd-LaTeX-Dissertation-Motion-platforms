@@ -2,12 +2,12 @@
 
 Трехстепенные электромеханические платформы, рассмотренные в предыдущих главах в силу особенностей выбранного привода и кинематической схемы обладают оптимальными характеристиками с точки зрения энергопотребления, затрат на эксплуатацию и обслуживание.  К основным недостаткам данного типа СП относят сравнительно низкое качество имитации движений, требующих больших ускорений – реакция с запозданием при проезде препятствий, неправдоподобные ощущения при ударах модели техники об объекты на 3D-сцене, пр. Данная особенность как правило связана с невысоким значением перегрузочной способности по вращающему моменту в используемых асинхронных двигателях. Помимо этого, при определенной конфигурации кабины тренажера (высоко расположенный центр тяжести, большая масса кабины), мотор-редукторы СП могут длительное время находиться в пусковом режиме работы. В связи с этим, повышенное внимание при разработке алгоритмов управления СП уделяется точному расчету рабочей зоны как по кинематическим, там и динамическим ограничениям платформы.
 
-Динамический расчёт платформ различной конфигурации достаточно подробно описан в литературе \cite{Sloushch2,2005a,2009a,2010c}, далее приведены выкладки для 3DOF платформы с использованием метода силового расчёта. 
+Динамический расчёт платформ различной конфигурации достаточно подробно описан в литературе \cite{Sloushch2,2005a,2009a,2010c,Aminzadeh2009,Guneri2007}, далее приведены выкладки для 3DOF платформы с использованием метода силового расчёта.
 
 \section{Уравнения обратной задачи динамики}
 
-Схема 3DOF платформы с изображением сил приведена на рис. 1. Особенностью используемой кинематической схемы является центральный карданный шарнир, удерживающий платформу от перемещений по курсу. 
- 
+Схема 3DOF платформы с изображением сил приведена на рис. 1. Особенностью используемой кинематической схемы является центральный карданный шарнир, удерживающий платформу от перемещений по курсу.
+
 \begin{figure}[h]
 	\center
 	\includegraphics[width=0.75\textwidth]{3dof_kinematics_scheme_dynamic}
@@ -59,7 +59,7 @@ E_{12} = \begin{pmatrix}
 -a-x_c \\ b-y_c \\ -z_c
 \end{pmatrix} \times S_1^0 = \\
 & = k_1\left\{
-\left[\begin{pmatrix}b \\ a\end{pmatrix} + 
+\left[\begin{pmatrix}b \\ a\end{pmatrix} +
 x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
 y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 \right]S_{1,z}^0+z_c\begin{pmatrix}S_{1,y}^0 \\ -S_{1,x}^0\end{pmatrix}\right\} \\
@@ -67,7 +67,7 @@ y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 -a-x_c \\ -b-y_c \\ -z_c
 \end{pmatrix} \times S_2^0 = \\
 & = k_2\left\{
-\left[\begin{pmatrix}-b \\ a\end{pmatrix} + 
+\left[\begin{pmatrix}-b \\ a\end{pmatrix} +
 x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
 y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 \right]S_{2,z}^0+z_c\begin{pmatrix}S_{2,y}^0 \\ -S_{2,x}^0\end{pmatrix}\right\} \\
@@ -75,7 +75,7 @@ y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 c-x_c \\ -y_c \\ -z_c
 \end{pmatrix} \times S_3^0 = \\
 & = k_3\left\{
-\left[\begin{pmatrix}0 \\ c\end{pmatrix} + 
+\left[\begin{pmatrix}0 \\ c\end{pmatrix} +
 x_c\begin{pmatrix}0 \\ 1\end{pmatrix} -
 y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 \right]S_{3,z}^0+z_c\begin{pmatrix}S_{3,y}^0 \\ -S_{3,x}^0\end{pmatrix}\right\} \\
@@ -128,16 +128,16 @@ y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 \end{pmatrix}x
 \end{equation}
 
-С учетом матрицы $E_{12}$ вектор угловых скоростей имеет вид: 
+С учетом матрицы $E_{12}$ вектор угловых скоростей имеет вид:
 
 \begin{equation}
 \label{eq:AngularSpeedInMovingCS}
 E_{12}\Omega^0 = \begin{pmatrix}
 \Omega_x^0 \\ \Omega_y^0 \\ \Omega_z^0
-\end{pmatrix} = 
+\end{pmatrix} =
 E_{12}\begin{pmatrix}
 \dot{\alpha}\cos{\beta} \\ \dot{\beta} \\ -\dot{\alpha}\sin{\beta}
-\end{pmatrix} = 
+\end{pmatrix} =
 \begin{pmatrix}
 \dot{\alpha}\cos{\beta} \\ \dot{\beta}
 \end{pmatrix}
@@ -146,7 +146,7 @@ E_{12}\begin{pmatrix}
 Уравнение моментов с учетом введенной в \ref{eq:AuxiliaryUnitMatrix} матрицы $E_{12}$ имеет вид:
 \begin{equation}
 \label{eq:TorquesEqCommon}
-E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = 
+E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] =
 E_{12}\left[M_1^0 + M_2^0 + M_3^0 + M_S^0\right]
 \end{equation}
 
@@ -159,7 +159,7 @@ I_x & 0 & 0 \\ 0 & I_y & 0 \\ 0 & 0 & I_z
 Раскроем левую инерционную часть уравнения моментов \ref{eq:TorquesEqCommon}:
 \begin{equation}
 \label{eq:TorquesEqLeftInertialPart}
-E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \begin{pmatrix}I_x\ddot{\alpha}\cos{\beta} \\ I_y\ddot{\beta}\end{pmatrix} + 
+E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \begin{pmatrix}I_x\ddot{\alpha}\cos{\beta} \\ I_y\ddot{\beta}\end{pmatrix} +
 \begin{pmatrix}\left(I_x-I_y-I_z\right)\dot{\beta} \\ \left(I_z-I_x\right)\dot{\alpha}\cos{\beta}\end{pmatrix}\dot{\alpha}\sin{\beta}
 \end{equation}
 
@@ -203,17 +203,17 @@ E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \
 \label{eq:KoefsLinearSystem2}
 \begin{aligned}
 & \begin{pmatrix}
-F_1 & F_2 & F_3 \\ 
+F_1 & F_2 & F_3 \\
 bD_1 & -bD_2 & 0 \\
 aD_1 & aD_2 & -cD_3
-\end{pmatrix}k + 
+\end{pmatrix}k +
 \begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}kz_c +
-\begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}Ek = \frac{1}{L} 
+\begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}Ek = \frac{1}{L}
 \begin{pmatrix}
 m\ddot{h} \\
 m_{\alpha} \\
-m_{\beta}	
-\end{pmatrix} + \\ 
+m_{\beta}
+\end{pmatrix} + \\
 & + \frac{1}{L}\begin{pmatrix}
 k_sh - f_0 + mg \\
 y_c(m\ddot{h} + mg) \\
@@ -238,11 +238,11 @@ Q_i  = \begin{pmatrix}
 \label{eq:TorquesFromCrankAnglesDetailed}
 \begin{aligned}
 & Q_i = k_iG_i,~i=1,\dots,3 \\
-& G_1 = R \left\{ L\sin{q_1}-R\sin{q_1}\cos{q_1}-R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_1} + \frac{1}{2L}\sin^3{q_1} \right] \right. +\\ 
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right) 
+& G_1 = R \left\{ L\sin{q_1}-R\sin{q_1}\cos{q_1}-R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_1} + \frac{1}{2L}\sin^3{q_1} \right] \right. +\\
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right)
 \right\} \\
-& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}-R^2 \left[ \frac{2}{8b} {\left( \cos{q_2}-\cos{q_2} \right)}^2 \cos{q_2} + \frac{2}{2L}\sin^3{q_2} \right] \right. +\\ 
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_2}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_2}\cos{q_2}\right) 
+& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}-R^2 \left[ \frac{2}{8b} {\left( \cos{q_2}-\cos{q_2} \right)}^2 \cos{q_2} + \frac{2}{2L}\sin^3{q_2} \right] \right. +\\
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_2}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_2}\cos{q_2}\right)
 \right\} \\
 & G_3 = R\left\{L\sin{q_3}-R\sin{q_3}\cos{q_3}-R^2\frac{1}{2L}\sin^3q_3\right\}
 \end{aligned}
@@ -254,7 +254,7 @@ Q_i  = \begin{pmatrix}
 Матрица системы \ref{eq:LinearSystemStatic}:
 \begin{equation}
 \begin{aligned}
-	A_0 = 
+	A_0 =
 	\begin{pmatrix}
 	F_1 & F_2 & F_3 \\
 	bD_1 & -bD_2 & 0 \\
@@ -270,7 +270,7 @@ Q_i  = \begin{pmatrix}
 	bcD_2D_3 & cD_3F_2 + aD_2F_3 & bD_2F_3 \\
 	bcD_1D_3 & -aD_1F_3-cD_3F_1 & bD_1F_3 \\
 	2abD_1D_2 & a\left(D_1F_2-D_2F_1\right) & -b\left(D_1F_2 + D_2F_1\right)
-\end{pmatrix}	 
+\end{pmatrix}
 \end{aligned}
 \end{equation}
 
@@ -291,12 +291,12 @@ Q_i  = \begin{pmatrix}
 
 \begin{equation}
 \begin{aligned}
-	k & = \left(A_0 + H\right)^{-1}B = A_0^{-1}\left(I + HA_0^{-1}\right)^{-1}B \\ 
+	k & = \left(A_0 + H\right)^{-1}B = A_0^{-1}\left(I + HA_0^{-1}\right)^{-1}B \\
 	&= A_0^{-1}\sum_{i=0}^{\inf}\left(-HA_0^{-1}\right)^i B = A_0^{-1}\left(\sum_{i=0}^{\inf}C^i\right)B,
 \end{aligned}
 \end{equation}
 
-где 
+где
 
 \begin{equation}
 \begin{aligned}
@@ -367,7 +367,7 @@ Q_i  = \begin{pmatrix}
 		S^0_x A_2 & \approx \frac{1}{2b}\kappa^3 C_{1,\beta}c\left(\sin^2{q_2} - \sin^2{q_1}\right) \\
 		S^0_x A_3 & \approx \frac{1}{2}\kappa^3 C_{1,\beta}\left(2\sin^2{q_3} - \sin^2{q_1} - \sin^2{q_2}\right) + \kappa^2\frac{a+c}{L}C^2_{1,\beta} + \\
 		& + \kappa^2\frac{a+c}{L}\left(C^2_{1,\beta} + 2\kappa C_{1,\beta}C_{2,\beta}\right)
-	\end{aligned} 
+	\end{aligned}
 \end{equation*}
 
 Т.к. $\kappa^3$ является малой величиной и умножается на линейную комбинацию тригонометрических функций, компонентами матрицы итераций, содержащими $\kappa^3$ можно пренебречь. Запишем матрицу итераций до второго порядка $\kappa$:
@@ -379,7 +379,7 @@ Q_i  = \begin{pmatrix}
 	\end{pmatrix} + \right.\\
 	&\left. + k\begin{pmatrix}
 	0 & 0 & 0 \\
-	-\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)} & \frac{\sin{q_2}-\sin{q_1}}{2b} & \frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{2\left(a+c\right)}\\	
+	-\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)} & \frac{\sin{q_2}-\sin{q_1}}{2b} & \frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{2\left(a+c\right)}\\
 	0 & 0 & 0 \\
 	\end{pmatrix} - \right.\\
 	& \left.\frac{1}{2L}\kappa^2\begin{pmatrix}
@@ -390,7 +390,7 @@ Q_i  = \begin{pmatrix}
 \end{aligned}
 \end{equation}
  Определитель $\Delta$ отличается от $2\left(a+c\right)$ на величину порядка $\kappa^2$. При возведении в квадрат матрицы $z_cC_0$ умножаются на 0 все элементы первого столбца. Множитель $\kappa^2$ останется только в центральном элементе:
- 
+
 \begin{equation}
 \begin{aligned}
 	\kappa^2\left(\frac{2\left(a+c\right)}{\Delta}\right)^2 \frac{z^2_c}{\left(2b\right)^2}\left(\sin{q_2} - \sin{q_1}\right)
@@ -398,7 +398,7 @@ Q_i  = \begin{pmatrix}
 \end{equation}
 
 которым, как правило можно пренебречь.
-	
+
 Поэтому одна итерация в решении системы линейных уравнений дает неплохую аппроксимацию решения.
 
 \subsection{Слагаемое с горизонтальным смещением центра тяжести}
@@ -458,11 +458,11 @@ EA^{-1}_0 e_3 & \approx -\kappa\sin{\alpha}\cos^2{\beta}\frac{2\sin{q_3} - \sin{
 \label{eq:LinearSystemStatic}
 \begin{aligned}
 & \begin{pmatrix}
-\bar{F_1} & \bar{F_2} & \bar{F_3} \\ 
+\bar{F_1} & \bar{F_2} & \bar{F_3} \\
 \bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
 \bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
-\end{pmatrix}\bar{k} + 
-\begin{pmatrix}0 \\ \bar{S}_y^0z_c -y_c\bar{E} \\ -\bar{S}_x^0z_c+x_c\bar{E}\end{pmatrix}\bar{k} = \frac{1}{L} 
+\end{pmatrix}\bar{k} +
+\begin{pmatrix}0 \\ \bar{S}_y^0z_c -y_c\bar{E} \\ -\bar{S}_x^0z_c+x_c\bar{E}\end{pmatrix}\bar{k} = \frac{1}{L}
 \begin{pmatrix}
 k_s\bar{h} - f_0 + mg \\
 y_cmg \\-x_cmg
@@ -476,13 +476,13 @@ y_cmg \\-x_cmg
 \begin{equation}
 \label{eq:AdditionalEstimatedVariables}
 \begin{pmatrix}
-\bar{p_1} \\ \bar{p_2} \\ \bar{p_3} 
-\end{pmatrix} = 
+\bar{p_1} \\ \bar{p_2} \\ \bar{p_3}
+\end{pmatrix} =
 \begin{pmatrix}
-\bar{F_1} & \bar{F_2} & \bar{F_3} \\ 
+\bar{F_1} & \bar{F_2} & \bar{F_3} \\
 \bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
 \bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
-\end{pmatrix}\bar{k} 
+\end{pmatrix}\bar{k}
 \end{equation}
 
 Тогда после подстановки \ref{eq:AdditionalEstimatedVariables} в \ref{eq:LinearSystemStatic} получим:
@@ -507,7 +507,7 @@ y_cmg \\-x_cmg
 & J_c\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
 c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}-\left(\bar{S}_y^0\bar{k}\right)_iz_c  \bar{y_c}\right|^2\right], \\
 & J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, \\
-& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\ 
+& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\
 & J_c\left(k_s,~f_0\right)\rightarrow\min.
 \end{aligned}
 \end{equation}
@@ -526,7 +526,7 @@ m_{s,\beta} & \approx 0,\\
 \end{aligned}
 \end{equation}
 
-Наиболее значимый вклад вносит компонента $\begin{pmatrix}0 & I_x\ddot{\alpha}\cos{\beta} & I_y \ddot{\beta} \end{pmatrix}^T$. 
+Наиболее значимый вклад вносит компонента $\begin{pmatrix}0 & I_x\ddot{\alpha}\cos{\beta} & I_y \ddot{\beta} \end{pmatrix}^T$.
 
 Поскольку смещения центра тяжести и параметры сил оценены по стационарным участкам, в каждый момент времени коэффициенты сил $k$ можно представить в виде:
 \begin{equation}
@@ -535,7 +535,7 @@ m_{s,\beta} & \approx 0,\\
 \end{aligned}
 \end{equation}
 
-где 
+где
 $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}\cos{\beta}\end{pmatrix},~k_{\beta}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ 0 \\ I_y\ddot{\alpha}\cos{\beta}\end{pmatrix},~$
 
 и
@@ -587,7 +587,7 @@ $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}
 \begin{aligned}
 	\hat{A}_i = A_{0,i} + c_xA_{\alpha,i} + c_yA_{\beta,i},~i=1,\ldots,n
 \end{aligned}
-\end{equation} 
+\end{equation}
 
 Для каждого $i$ это трехмерный вектор с компонентами, относящимися к каждому кривошипу.
 Результаты идентификации, приведенные в главе 6, показывают, что измерения имеют существенное запаздывание по фазе, зависящие от частоты.
@@ -607,7 +607,7 @@ $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}
     \center{
         %\hfill
         \subcaptionbox[List-of-Figures entry]{\label{img:dyn_restrict_Q800}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q800}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:dyn_restrict_Q600}} {\includegraphics[width=0.45\linewidth]{dyn_restrict_Q600}}
         \hfill
     }
@@ -621,8 +621,8 @@ $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}
     \label{img:dyn_restrict_static}
 \end{figure}
 
-На рис. 2(а) проиллюстрирована ограничительная характеристика для платформы с параметрами $a = 0,25 \text{м}; b = 0,4 \text{м}; c = 0,5 \text{м}; R = 0,15 \text{м}; L = 0,56 \text{м}$ при установленном ограничении на движущие моменты 100\% от номинального электромагнитного момента используемых мотор-редукторов. 
-Рабочая зона представлена в виде проекции параллелепипеда на плоскость «крен-тангаж», допустимые высоты в метрах выделены цветом в соответствии со шкалой в правой части рисунка.  
+На рис. 2(а) проиллюстрирована ограничительная характеристика для платформы с параметрами $a = 0,25 \text{м}; b = 0,4 \text{м}; c = 0,5 \text{м}; R = 0,15 \text{м}; L = 0,56 \text{м}$ при установленном ограничении на движущие моменты 100\% от номинального электромагнитного момента используемых мотор-редукторов.
+Рабочая зона представлена в виде проекции параллелепипеда на плоскость «крен-тангаж», допустимые высоты в метрах выделены цветом в соответствии со шкалой в правой части рисунка.
 На рис. 2(б) показана рабочая зона с установленным ограничением 50\% от номинального момента. Как видно по срезам рабочей зоны, некорректный выбор двигателей или превышение допустимой нагрузки на двигатели может существенно ограничить допустимые перемещения платформы даже в статическом режиме. Наличие срезов характеристики объясняется неравномерностью распределения нагрузки на двигатели (все кривошипы работают в одной полуплоскости) и несимметричностью расположения двигателей 1 и 2 по сравнению с двигателем 3 вдоль оси Х.
 
 В ходе экспериментов с динамической моделью была также выявлена существенная зависимость значений моментов от величины подъема центра тяжести относительно подвижной платформы.

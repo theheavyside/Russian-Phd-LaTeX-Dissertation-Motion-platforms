@@ -3,6 +3,8 @@
 \section{Вывод уравнений обратной задачи кинематики для платформ с кривошипно-шатунными опорами} \label{sec:InverseKinematics}
 
 \subsection{ОЗК для трехстепенной СП}
+
+Кинематический анализ для платформ с тремя степенями свободы широко известен как основное средство для решения задачи о базовом управлении платформой путём преобразования координат \cite{Li2005,Ng2006,Lukanin2005}.
 \label{subsec:InvKin3DOFMotionPlatform}
 Кинематическая схема СП 3DOF показана на рисунке \ref{img:3dof_kinematics_scheme}.
 ~Введены следующие обозначения:
@@ -19,8 +21,8 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 
 \begin{equation}
 	\label{eq:KinematicsRotationMatrices}
-	\begin{aligned}	
-	& R_x = 
+	\begin{aligned}
+	& R_x =
 	\left(
 		\begin{array}{ccc}
 			1 &	0 				 &	0 \\
@@ -29,7 +31,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 		\end{array}
 	\right),
 	\\
-	& Ry = 
+	& Ry =
 	\left(
 		\begin{array}{ccc}
 			\cos\beta &	0   &	\sin\beta \\
@@ -46,24 +48,24 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 	\begin{aligned}
 		\left(\begin{array}{ccc} x_{C1} \\ y_{C1} \\ z_{C1} \end{array}\right) = R_x R_y
 		\left(\begin{array}{ccc} -a \\ -b \\ 0	\end{array}\right) +
-		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) = 
-		\left(\begin{array}{lr} 
-				a\cos{\beta} \\ 
-				-b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\ 
+		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
+		\left(\begin{array}{lr}
+				a\cos{\beta} \\
+				-b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\
 				z_p^* - b\sin{\alpha} + a\cos{\alpha}\sin{\beta}\end{array}\right)\\
 		\left(\begin{array}{ccc} x_{C2} \\ y_{C2} \\ z_{C2} \end{array}\right) = R_x R_y
 		\left(\begin{array}{ccc} -a \\ b \\ 0	\end{array}\right) +
 		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
-		\left(\begin{array}{lr} 
-				a\cos{\beta} \\ 
-				b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\ 
+		\left(\begin{array}{lr}
+				a\cos{\beta} \\
+				b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\
 				z_p^* + b\sin{\alpha} + a\cos{\alpha}\sin{\beta}\end{array}\right)\\
 		\left(\begin{array}{ccc} x_{C3} \\ y_{C3} \\ z_{C3} \end{array}\right) = R_x R_y
 		\left(\begin{array}{ccc} c \\ 0 \\ 0	\end{array}\right) +
-		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) = 
-		\left(\begin{array}{lr} 
-				c\cos{\beta} \\ 
-				c\sin{\alpha}\sin{\beta} \\ 
+		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
+		\left(\begin{array}{lr}
+				c\cos{\beta} \\
+				c\sin{\alpha}\sin{\beta} \\
 				z_p^* - c\cos{\alpha}\sin{\beta}\end{array}\right)
 	\end{aligned}
 \end{equation}
@@ -72,11 +74,11 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{equation}
 \label{eq:KinematicsCrankPoints}
 	\begin{aligned}
-		& \left(\begin{array}{lr} x_{B1} \\ y_{B1} \\ z_{B1} \end{array}\right) = 
+		& \left(\begin{array}{lr} x_{B1} \\ y_{B1} \\ z_{B1} \end{array}\right) =
 		\left(\begin{array}{lr} -a \\ -b + R\sin{q_1^*} \\ -R\cos{q_1^*} \end{array}\right);\\
-		& \left(\begin{array}{lr} x_{B2} \\ y_{B2} \\ z_{B2} \end{array}\right) = 
+		& \left(\begin{array}{lr} x_{B2} \\ y_{B2} \\ z_{B2} \end{array}\right) =
 		\left(\begin{array}{lr} -a \\ b + R\sin{q_2^*} \\ -R\cos{q_2^*} \end{array}\right);\\
-		& \left(\begin{array}{lr} x_{B3} \\ y_{B3} \\ z_{B3} \end{array}\right) = 
+		& \left(\begin{array}{lr} x_{B3} \\ y_{B3} \\ z_{B3} \end{array}\right) =
 		\left(\begin{array}{lr} c \\ R\sin{q_3^*} \\ -R\cos{q_3^*} \end{array}\right).
 	\end{aligned}
 \end{equation}
@@ -227,24 +229,25 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{aligned}
 	J\left( X^k\right)=\left(
 	\begin{array}{ccc}
-		\frac{F_1\left(x_1^k\right)-F_1\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} & 
-		\frac{F_1\left(x_2^k\right)-F_1\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} & 
+		\frac{F_1\left(x_1^k\right)-F_1\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} &
+		\frac{F_1\left(x_2^k\right)-F_1\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} &
 		\frac{F_1\left(x_3^k\right)-F_1\left(x_3^{k-1}\right)}{x_3^k-x_3^{k-1}} \\
-		\frac{F_2\left(x_1^k\right)-F_2\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} & 
-		\frac{F_2\left(x_2^k\right)-F_2\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} & 
+		\frac{F_2\left(x_1^k\right)-F_2\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} &
+		\frac{F_2\left(x_2^k\right)-F_2\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} &
 		\frac{F_2\left(x_3^k\right)-F_2\left(x_3^{k-1}\right)}{x_3^k-x_3^{k-1}} \\
-		\frac{F_3\left(x_1^k\right)-F_3\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} & 
-		\frac{F_3\left(x_1^k\right)-F_3\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} & 
+		\frac{F_3\left(x_1^k\right)-F_3\left(x_1^{k-1}\right)}{x_1^k-x_1^{k-1}} &
+		\frac{F_3\left(x_1^k\right)-F_3\left(x_2^{k-1}\right)}{x_2^k-x_2^{k-1}} &
 		\frac{F_3\left(x_1^k\right)-F_3\left(x_3^{k-1}\right)}{x_3^k-x_3^{k-1}}
-	\end{array}		
+	\end{array}
 	\right)
 \end{aligned}
 \end{equation}
 \subsection{Аппроксимация уравнений ПЗК}
 
-Для дальнейшего решения и анализа уравнений динамики СП численного решения ПЗК оказывается недостаточно, вследствие чего требуется также получить аналитические зависимости $\mathbf{X}=f\left(\mathbf{q}\right)$. 
+Для дальнейшего решения и анализа уравнений динамики СП численного решения ПЗК оказывается недостаточно, вследствие чего требуется также получить аналитические зависимости $\mathbf{X}=f\left(\mathbf{q}\right)$.
+Как известно, решение ПЗК представляет сложность из-за наличия избыточных кинематических связей \cite{2014c,Bonev2000,Niu2013,Lapikov2014,2007,Charters2009,Kucuk2006,Hu2011,Jiang2008}.
 
-Т.к. уравнения системы \ref{eq:DirectKinematicsProblemFormulation} напрямую не обращаются, необходимо упростить выражения, в которые входят тригонометрические и степенные функции от $\alpha,~\beta,~h$. Для этого разложим $\alpha, \beta, h$ уравнения  в ряд по степеням $\kappa = R/L$: 
+Т.к. уравнения системы \ref{eq:DirectKinematicsProblemFormulation} напрямую не обращаются, необходимо упростить выражения, в которые входят тригонометрические и степенные функции от $\alpha,~\beta,~h$. Для этого разложим $\alpha, \beta, h$ уравнения  в ряд по степеням $\kappa = R/L$:
 \begin{equation}
 \label{eq:DirectKinematicsSeriesExpansion}
 \begin{aligned}
@@ -255,7 +258,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \end{equation}
 
 Для разложения выбрана величина $R/L$, т.к. вследствие особенностей проектирования КШМ, данное соотношение всегда меньше единицы и обычно находится в пределах 0.1-0.2. Следовательно, высокими порядками $\kappa$ можно пренебречь без существенных потерь точности вычислений $\alpha,~\beta,~h$. Ограничимся многочленами второй степени в \ref{eq:DirectKinematicsSeriesExpansion}.
-	
+
 Для получения коэффициентов $C_{1,\alpha},C_{2,\alpha},C_{1,\beta},C_{2,\beta}$ раскроем уравнения длин шатунов \ref{eq:KinematicsRodLengths}:
 \begin{equation}
 \label{eq:DirectKinematicsRodLengthsFull}
@@ -263,14 +266,14 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 	0 = & h^2 + 2hL + 2a^2\left(1-\cos\beta\right) + 2b^2\left(1-\cos\alpha\right) + R^2 + 2Rb\sin{q_1}\left(1 - \right.\\
 	&\left.-\cos\alpha\right) + 2\left(h+L\right)R\cos{q_1} + 2\left(h+L\right)\left(a\sin\beta + b\sin\alpha\cos\beta\right)+\\
 	& + 2b\sin\alpha\left(a\sin\beta + R\cos{q_1}\cos\beta\right) + 2aR\cos{q_1}\sin\beta \\
-	0 = & h^2 + 2hL + 2a^2\left(1-\cos\beta\right) + 2b^2\left(1-\cos\alpha\right) + R^2 - 2Rb\sin{q_2}\left(1 -\right.\\ 
+	0 = & h^2 + 2hL + 2a^2\left(1-\cos\beta\right) + 2b^2\left(1-\cos\alpha\right) + R^2 - 2Rb\sin{q_2}\left(1 -\right.\\
 	&\left. - \cos\alpha\right) + 2\left(h+L\right)R\cos{q_2} + 2\left(h+L\right)\left(a\sin\beta - b\sin\alpha\cos\beta\right)-\\
 	& - 2b\sin\alpha\left(a\sin\beta + R\cos{q_2}\cos\beta\right) + 2aR\cos{q_2}\sin\beta\\
 	0 = & h^2 + 2hL + 2c^2\left(1-\cos\beta\right) + R^2 + 2\left(h+L\right)R\cos{q_3}-\\
 	& - 2\left(h+L\right)c\sin\beta - 2cR\cos{q_3}\sin\beta.
 	\end{aligned}
 \end{equation}
-	
+
 Для тригонометрических функций применим разложение Тейлора того же порядка:
 \begin{equation}
 \label{eq:DirectKinematicsSinCosSeries}
@@ -280,7 +283,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 	& \sin\beta \approx \beta-\frac{\beta^3}{6} \approx C_{1,\beta}\kappa + C_{2,\beta}\kappa^2,\\
 	& \cos\beta \approx 1 - \frac{\beta^2}{2} \approx 1 - \frac{C^2_{1,\beta}}{2}\kappa^2.
 \end{aligned}
-\end{equation}	
+\end{equation}
 
 В результате решения полиномиальной относительно $\kappa$ системы получим следующие коэффициенты разложения функций $\alpha,\beta,h$.
 
@@ -324,7 +327,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 	\label{tbl:DirectKinematicsMaxErrors}
     \renewcommand{\arraystretch}{1.5}
     \begin{SingleSpace}
-	\begin{tabular}{@{}@{\extracolsep{20pt}}lllll@{}} 
+	\begin{tabular}{@{}@{\extracolsep{20pt}}lllll@{}}
         \toprule     %%% верхняя линейка
     	п/п	& $\kappa$ &$E_{max, \alpha}, ^o$	& $E_{max, \beta}, ^o$& $E_{max, h}$, мм	\\
         \midrule
@@ -343,7 +346,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 	\label{tbl:DirectKinematicsMaxErrorsMPParams}
     \renewcommand{\arraystretch}{1.5}
     \begin{SingleSpace}
-	\begin{tabular}{@{}@{\extracolsep{20pt}}llllll@{}} 
+	\begin{tabular}{@{}@{\extracolsep{20pt}}llllll@{}}
         \toprule     %%% верхняя линейка
     	п/п	& $a$, м & $b$, м & $c$, м & $R$, м & $L$, м \\
         \midrule
@@ -364,19 +367,19 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
     \center{
         \hfill
         \subcaptionbox[List-of-Figures entry]{\label{img:DirKinematicsErrorHwithAlphaFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_h_with_alpha0}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:DirKinematicsErrorHwithBetaFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_h_with_beta0}}
         \hfill
     }
     \center{
         \subcaptionbox[List-of-Figures entry]{\label{img:DirKinematicsErrorAlphaWithHFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_alpha_with_h0}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:DirKinematicsErrorAlphaWithBetaFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_alpha_with_beta0}}
         \hfill
     }
-	\center{    
+	\center{
         \subcaptionbox[List-of-Figures entry]{\label{img:DirKinematicsErrorBetaWithHFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_beta_with_h0}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:DirKinematicsErrorBetaWithAlphaFixed}} {\includegraphics[width=0.5\linewidth]{dir_kin_error_beta_with_alpha0}}
         \hfill
     }
@@ -388,7 +391,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 %\begin{figure}[ht]
 %    \center{
 %        \hfill
-%        
+%
 %    }
 %    \caption{Ошибка приближенного решения ПЗК по $\alpha$} % Этот текст попадает в названия рисунков в списке рисунков
 %    \label{img:DirectKinematicErrorsAlpha}
@@ -398,7 +401,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 %\begin{figure}[ht]
 %    \center{
 %        \hfill
-%        
+%
 %    }
 %    \caption{Ошибка приближенного решения ПЗК по $\beta$} % Этот текст попадает в названия рисунков в списке рисунков
 %    \label{img:DirectKinematicErrorsBeta}
@@ -407,10 +410,10 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \section{Расчет векторов шатунов}
 Для решения задач динамики необходимо определять положение точек шатунов в каждый момент времени.
 
-Пусть заданы углы $q_1,~q_2,~q_3$. Векторы вдоль шатунов от кривошипов к платформе обозначим $S_1,~S_2,~S_3$. 
+Пусть заданы углы $q_1,~q_2,~q_3$. Векторы вдоль шатунов от кривошипов к платформе обозначим $S_1,~S_2,~S_3$.
 
 С точностью до третьего порядка относительно $\kappa$ их компоненты определяются следующим образом.
-	
+
 Первый шатун:
 
 \begin{equation}
@@ -469,7 +472,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 
 \begin{equation}
 \begin{aligned}
-	\gamma_1 & = \frac{a}{2L}C^2_{1,\beta} - C_{2,\beta} + \frac{b}{L}C_{1,\alpha}C_{1,\beta}, \\ 
+	\gamma_1 & = \frac{a}{2L}C^2_{1,\beta} - C_{2,\beta} + \frac{b}{L}C_{1,\alpha}C_{1,\beta}, \\
 	\gamma_2 & = \frac{a}{2L}C^2_{1,\beta} - C_{2,\beta} - \frac{b}{L}C_{1,\alpha}C_{1,\beta}, \\
 	\gamma_3 & = -\frac{c}{2L}C^2_{1,\beta} - C_{2,\beta}.
 \end{aligned}
@@ -489,7 +492,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{aligned}
 	\frac{1}{L}S_1^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_1 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_1 \\ \delta_1 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_1\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
 	-\mu \frac{b}{a+c}C_{1,\alpha} + \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
-	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\ 
+	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\
 	C_{1,\beta}\gamma_1 + sq_1\delta_1
 	\end{pmatrix}
 \end{aligned}
@@ -501,7 +504,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{aligned}
 	\frac{1}{L}S_1^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_1 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_1 \\ \delta_1 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_1\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
 	-\mu \frac{b}{a+c}C_{1,\alpha} + \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
-	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\ 
+	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\
 	C_{1,\beta}\gamma_1 + sq_1\delta_1
 	\end{pmatrix}
 \end{aligned}
@@ -513,14 +516,14 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{aligned}
 	\frac{1}{L}S_1^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_1 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_1 \\ \delta_1 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_1\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
 	-\mu \frac{b}{a+c}C_{1,\alpha} + \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
-	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\ 
+	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\
 	C_{1,\beta}\gamma_1 + sq_1\delta_1
 	\end{pmatrix}
 \end{aligned}
 \end{equation}
 
 \section{Ограничительная кинематическая характеристика СП}
-Расчет ограничительной кинематической характеристики СП -- поверхности, построенной по границе рабочей зоны платформы, производится с целью планирования траекторий движения и определения предельных характеристик платформы по углам крена, тангажа и высоте. 
+Расчет ограничительной кинематической характеристики СП -- поверхности, построенной по границе рабочей зоны платформы \cite{Bonev2001}, производится с целью планирования траекторий движения и определения предельных характеристик платформы по углам крена, тангажа и высоте \cite{PhGuglielmetti, Alvan2003, Gugliemetti1994, Asif2011, Bandyopadhyay2009, Davliakos2008}.
 
 Пусть $X_{up}$ -- точка крепления одного из шатунов к платформе, а $X_e$ -- центр соответствующего вала. Введем обозначения:
 
@@ -578,7 +581,7 @@ c\beta - R \leq h \leq c\beta + R.
 которые определяют шестиугольник с вершинами:
 \begin{equation}
 \begin{aligned}
-	\begin{pmatrix}0 & \pm\frac{2R}{a+c}\end{pmatrix}, ~\begin{pmatrix}\pm\frac{R}{b} & \pm\frac{R}{a+c}\end{pmatrix} 
+	\begin{pmatrix}0 & \pm\frac{2R}{a+c}\end{pmatrix}, ~\begin{pmatrix}\pm\frac{R}{b} & \pm\frac{R}{a+c}\end{pmatrix}
 \end{aligned}
 \end{equation}
 
@@ -593,7 +596,7 @@ c\beta - R \leq h \leq c\beta + R.
 Это множество может быть четырехугольником, пятиугольником или шестиугольником. Оно получается пересечением ромба с вершинами в точках:
 \begin{equation}
 \begin{aligned}
-	\begin{pmatrix}0 & -\frac{h \pm R}{a}\end{pmatrix}, ~\begin{pmatrix}\pm\frac{R}{b} & -\frac{h}{a}\end{pmatrix} 
+	\begin{pmatrix}0 & -\frac{h \pm R}{a}\end{pmatrix}, ~\begin{pmatrix}\pm\frac{R}{b} & -\frac{h}{a}\end{pmatrix}
 \end{aligned}
 \end{equation}
 
@@ -611,7 +614,7 @@ c\beta - R \leq h \leq c\beta + R.
 \end{aligned}
 \end{equation}
 
-Окончательно, для трехстепенной платформы максимальные углы крена, тангажа и максимальный подъем определяются по следующим формулам: 
+Окончательно, для трехстепенной платформы максимальные углы крена, тангажа и максимальный подъем определяются по следующим формулам:
 
 \begin{equation}
 \label{eq:KinematicConstraints}
@@ -626,19 +629,19 @@ c\beta - R \leq h \leq c\beta + R.
     \center{
         \hfill
         \subcaptionbox[List-of-Figures entry]{\label{img:RestrictKinematicAlphaHNS}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicAlphaHNS}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:RestrictKinematicAlphaH}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicAlphaH}}
         \hfill
     }
     \center{
         \subcaptionbox[List-of-Figures entry]{\label{img:RestrictKinematicBetaHNS}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicBetaHNS}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:RestrictKinematicBetaH}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicBetaH}}
         \hfill
     }
-	\center{    
+	\center{
         \subcaptionbox[List-of-Figures entry]{\label{img:RestrictKinematicAlphaBetaNS}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicAlphaBetaNS}}%
-        \hfill       
+        \hfill
         \subcaptionbox{\label{img:RestrictKinematicAlphaBeta}} {\includegraphics[width=0.5\linewidth]{RestrictKinematicAlphaBeta}}
         \hfill
     }
