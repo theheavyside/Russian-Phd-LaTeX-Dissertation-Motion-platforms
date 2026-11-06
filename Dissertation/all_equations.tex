@@ -1,7 +1,151 @@
+
+\section{Вывод уравнений обратной задачи кинематики для платформ с кривошипно-шатунными опорами} \label{sec:InverseKinematics}
+
+\subsection{ОЗК для трехстепенной СП}
+
+Кинематический анализ для платформ с тремя степенями свободы широко известен как основное средство для решения задачи о базовом управлении платформой путём преобразования координат \cite{Li2005,Ng2006,Lukanin2005}.
+\label{subsec:InvKin3DOFMotionPlatform}
+Кинематическая схема СП 3DOF показана на рисунке \ref{img:3dof_kinematics_scheme}.
+~Введены следующие обозначения:
+$R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- расстояние по оси X до двигателей 1 и 2, $b$ - расстояние по оси Y до двигателей 1 и 2, $c$ -- расстояние по оси X до двигателя 3, $\alpha$ -- угол крена, $\beta$ -- угол тангажа, $z_p = \left(O O_1\right)$ -- подъем центра подвижной платформы, $h = z_p - L$ -- смещение центра по высоте относительно среднего значения $z_p$, $q_1, q_2, q_3$ -- углы поворота кривошипов.
+
+\begin{figure}[h]
+	\center
+	\includegraphics[width=0.75\textwidth]{3dof_kinematics_scheme}
+	\caption{Кинематическая схема подвижности 3DOF}
+	\label{img:3dof_kinematics_scheme}
+\end{figure}
+
+В ходе решения ОЗК необходимо определить вектор $\mathbf{q}=(q_1^*, q_2^*, q_3^*)^T$ обобщенных коодинат~по~заданному вектору~положения~платформы $\mathbf{X}=(\alpha,~\beta,~z_p^*)^T$. Для вывода уравнений ОЗК выразим координаты точек С1, С2, С3 через углы крена, тангажа и подъем. Для этого запишем матрицы поворота относительно осей $x$ и $y$
+
+\begin{equation}
+	\label{eq:KinematicsRotationMatrices}
+	\begin{aligned}
+	& R_x =
+	\left(
+		\begin{array}{ccc}
+			1 &	0 				 &	0 \\
+			0 &	\cos\alpha   &	-\sin\alpha\\
+			0 &	\sin\alpha	 &	\cos\alpha
+		\end{array}
+	\right),
+	\\
+	& Ry =
+	\left(
+		\begin{array}{ccc}
+			\cos\beta &	0   &	\sin\beta \\
+			0              &	1   & 	0\\
+			-\sin\beta &	0	& 	\cos\beta
+		\end{array}
+	\right).
+	\end{aligned}
+\end{equation}
+
+Тогда координаты точек крепления шатунов к подвижной платформе:
+\begin{equation}
+\label{eq:KinematicsUpperPoints}
+	\begin{aligned}
+		\left(\begin{array}{ccc} x_{C1} \\ y_{C1} \\ z_{C1} \end{array}\right) = R_x R_y
+		\left(\begin{array}{ccc} -a \\ -b \\ 0	\end{array}\right) +
+		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
+		\left(\begin{array}{lr}
+				a\cos{\beta} \\
+				-b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\
+				z_p^* - b\sin{\alpha} + a\cos{\alpha}\sin{\beta}\end{array}\right)\\
+		\left(\begin{array}{ccc} x_{C2} \\ y_{C2} \\ z_{C2} \end{array}\right) = R_x R_y
+		\left(\begin{array}{ccc} -a \\ b \\ 0	\end{array}\right) +
+		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
+		\left(\begin{array}{lr}
+				a\cos{\beta} \\
+				b\cos{\alpha}-a\sin{\alpha}\sin{\beta} \\
+				z_p^* + b\sin{\alpha} + a\cos{\alpha}\sin{\beta}\end{array}\right)\\
+		\left(\begin{array}{ccc} x_{C3} \\ y_{C3} \\ z_{C3} \end{array}\right) = R_x R_y
+		\left(\begin{array}{ccc} c \\ 0 \\ 0	\end{array}\right) +
+		\left(\begin{array}{ccc} 0 \\ 0 \\ z_p^* \end{array}\right) =
+		\left(\begin{array}{lr}
+				c\cos{\beta} \\
+				c\sin{\alpha}\sin{\beta} \\
+				z_p^* - c\cos{\alpha}\sin{\beta}\end{array}\right)
+	\end{aligned}
+\end{equation}
+
+Т.к. кривошипы вращаются строго в плоскости $yOz$, справедливы следующие соотношения:
+\begin{equation}
+\label{eq:KinematicsCrankPoints}
+	\begin{aligned}
+		& \left(\begin{array}{lr} x_{B1} \\ y_{B1} \\ z_{B1} \end{array}\right) =
+		\left(\begin{array}{lr} -a \\ -b + R\sin{q_1^*} \\ -R\cos{q_1^*} \end{array}\right);\\
+		& \left(\begin{array}{lr} x_{B2} \\ y_{B2} \\ z_{B2} \end{array}\right) =
+		\left(\begin{array}{lr} -a \\ b + R\sin{q_2^*} \\ -R\cos{q_2^*} \end{array}\right);\\
+		& \left(\begin{array}{lr} x_{B3} \\ y_{B3} \\ z_{B3} \end{array}\right) =
+		\left(\begin{array}{lr} c \\ R\sin{q_3^*} \\ -R\cos{q_3^*} \end{array}\right).
+	\end{aligned}
+\end{equation}
+
+Далее, т.к. расстояние между точками $B_i$ и $C_i$, $i=1\ldots3$ неизменно и равно $L$, можно записать следующие уравнения:
+\begin{equation}
+\label{eq:KinematicsRodLengths}
+	\begin{aligned}
+		 (x_{B1} - x_{C1})^2 + (y_{B1} - y_{C1})^2 + (z_{B1} - z_{C1})^2 = L^2;\\
+		 (x_{B2} - x_{C2})^2 + (y_{B2} - y_{C2})^2 + (z_{B2} - z_{C2})^2 = L^2;\\
+		 (x_{B3} - x_{C3})^2 + (y_{B3} - y_{C3})^2 + (z_{B3} - z_{C3})^2 = L^2.
+	\end{aligned}
+\end{equation}
+
+После подстановки \ref{eq:KinematicsCrankPoints} и \ref{eq:KinematicsUpperPoints} в \ref{eq:KinematicsRodLengths} и дополнительных преобразований получаем следующие уравнения:
+
+\begin{equation}
+\label{eq:KinematicsDriveAnglesFromPosEq}
+\begin{aligned}
+\bar{A_i} + \bar{B_i}\sin{q_i} + \bar{C_i}\cos{q_i} = 0,~~i = 1,2,3
+\end{aligned}
+\end{equation}
+
+где коэффициенты $\bar{A_i}, \bar{B_i}, \bar{C_i}$ зависят от $\alpha, \beta, z_p$ в соответствии с формулами \ref{eq:KinematicsUpperPoints},\ref{eq:KinematicsCrankPoints}.
+
+\begin{equation}
+\label{eq:KinematicsSquareEqKoefficients}
+\begin{aligned}
+	& \bar{A_i} = (x_{Ci} - x_{Ai})^2 + (y_{Ci} - y_{Ai})^2 + (z_{Ci} - z_{Ai})^2 + R^2 + L^2,\\
+	& \bar{B_i} = -2R(y_{Ci} - y_{Ai}),\\
+	& \bar{C_i} = 2R(z_{Ci} - z_{Ai}).
+\end{aligned}
+\end{equation}
+
+Перейдя от $\sin{q_i}$ и $\cos{q_i}$ к половинному углу через $\tg\left({q_i/2}\right)$, получим следующие квадратные уравнения:
+\begin{equation}
+\label{eq:KinematicsSquareEquations}
+\begin{aligned}
+	\left(\bar{A_i}-\bar{C_i}\right)\tg^2{\frac{q_i}{2}} + 2B_i\tg{\frac{q_i}{2}} + \left(\bar{A_i}+\bar{C_i}\right)=0
+\end{aligned}
+\end{equation}
+Из решения уравнения \ref{eq:KinematicsSquareEquations} получаем два корня:
+
+\begin{equation}
+\label{eq:KinematicsPhiRoots}
+\begin{aligned}
+	q_i = -2\arctan\frac{\bar{B_i}\pm\sqrt{\bar{B_i^2} + \bar{C_i^2} - \bar{A_i^2}}}{\bar{A_i} - \bar{C_i}}
+\end{aligned}
+\end{equation}
+
+Оба корня с точки зрения кинематики платформы идентичны. Выбором знака <<+>> или <<-->> в уравнении \ref{eq:KinematicsPhiRoots} можно задать область значений обобщенной координаты $(q_i < 0)$ или $(q_i > 0)$, т.е. определить соответствующую рабочую полуплоскость вращения кривошипа. Как будет показано далее, выбор рабочей плоскости сказывается на динамических характеристиках СП.
+
 \subsection{Аппроксимация уравнений ПЗК}
 
 Для дальнейшего решения и анализа уравнений динамики СП численного решения ПЗК оказывается недостаточно, вследствие чего требуется также получить аналитические зависимости $\mathbf{X}=f\left(\mathbf{q}\right)$.
 Как известно, решение ПЗК представляет сложность из-за наличия избыточных кинематических связей \cite{2014c,Bonev2000,Niu2013,Lapikov2014,2007,Charters2009,Kucuk2006,Hu2011,Jiang2008}.
+
+Путем подстановки \ref{eq:KinematicsCrankPoints} и \ref{eq:KinematicsUpperPoints} в \ref{eq:KinematicsRodLengths} получим систему уравнений ПЗК:
+\begin{equation}
+\label{eq:DirectKinematicsProblemFormulation}
+\begin{aligned}
+& F_1\left(X\right)=\left(b\sin{\alpha}\sin{\beta}-a\cos{\beta}+a\right)^2+\left(b\cos{\alpha}+b-R\sin{q_1}\right)^2+\\
+&+\left(z_p+a\sin{\beta}+b\cos{\beta}\sin{\alpha}+R\cos{q_1}\right)^2-L^2=0;\\
+& F_2\left(X\right)=\left(-b\sin{\alpha}\sin{\beta}-a\cos{\beta}+a\right)^2+\left(b\cos{\alpha}+b+R\sin{q_2}\right)^2+\\
+&+\left(z_p+a\sin{\beta}-b\cos{\beta}\sin{\alpha}+R\cos{q_2}\right)^2-L^2=0;\\
+& F_3\left(X\right)=\left(c\cos{\beta}-c\right)^2+\left(R\sin{q_3}\right)^2+\left(z_p-c\sin{\beta}+R\cos{q_3}\right)^2-L^2=0.
+\end{aligned}
+\end{equation}
 
 Т.к. уравнения системы \ref{eq:DirectKinematicsProblemFormulation} напрямую не обращаются, необходимо упростить выражения, в которые входят тригонометрические и степенные функции от $\alpha,~\beta,~h$. Для этого разложим $\alpha, \beta, h$ уравнения  в ряд по степеням $\kappa = R/L$:
 \begin{equation}
@@ -13,7 +157,9 @@
 \end{aligned}
 \end{equation}
 
-Для разложения выбрана величина $R/L$, т.к. вследствие особенностей проектирования КШМ, данное соотношение всегда меньше единицы и обычно находится в пределах 0.1-0.2. Следовательно, высокими порядками $\kappa$ можно пренебречь без существенных потерь точности вычислений $\alpha,~\beta,~h$. Ограничимся многочленами второй степени в \ref{eq:DirectKinematicsSeriesExpansion}.
+Для разложения выбрана величина $R/L$, т.к. вследствие особенностей проектирования КШМ данное соотношение всегда меньше единицы. Для исследуемого стенда $R = 0{,}15$~м, $L = 0{,}56$~м, то есть $\kappa = 0{,}268$, $\kappa^2 = 0{,}072$, $\kappa^3 = 0{,}019$. Следовательно, высокими порядками $\kappa$ можно пренебречь без существенных потерь точности вычислений $\alpha,~\beta,~h$.
+
+Ниже выписаны коэффициенты первого и второго порядка; расчётные реализации (как MATLAB-, так и Python-версия) удерживают и третий порядок, коэффициенты которого приведены в \ref{eq:DirectKinematicsCoefsApprox3}.
 
 Для получения коэффициентов $C_{1,\alpha},C_{2,\alpha},C_{1,\beta},C_{2,\beta}$ раскроем уравнения длин шатунов \ref{eq:KinematicsRodLengths}:
 \begin{equation}
@@ -57,10 +203,20 @@
 \begin{equation}
 \label{eq:DirectKinematicsCoefsApprox2}
 \begin{aligned}
-	C_{2,\alpha} & = - \frac{1}{2}\left(\cos{q_1} + \cos{q_2}\right)C_{1,\alpha}=\frac{L}{4b}\left(\cos^2{q_2} - \cos^2{q_1}\right)\\
+	C_{2,\alpha} & = - \frac{1}{2}\left(\cos{q_1} + \cos{q_2}\right)C_{1,\alpha}=\frac{L}{4b}\left(\cos^2{q_1} - \cos^2{q_2}\right)\\
 	C_{2,\beta} & = -\frac{L}{2\left(a+c\right)}\left[\cos^2{q_3} - \frac{1}{2}\left(\cos^2{q_1} + \cos^2{q_2}\right)\right],\\
 	C_{2,h} & = cC_{2,\beta} + \frac{L}{2}\left(\cos^2{q_3} - 1\right) = \\
 	& = \frac{L}{2\left(a+c\right)}\left[a\cos^2{q_3} + \frac{c}{2}\left(\cos^2{q_1} + \cos^2{q_2}\right)\right] - \frac{L}{2}.
+\end{aligned}
+\end{equation}
+
+Коэффициенты третьего порядка при $\kappa^3$, удерживаемые в расчётных реализациях:
+\begin{equation}
+\label{eq:DirectKinematicsCoefsApprox3}
+\begin{aligned}
+	C_{3,\alpha} & = -\frac{1}{4}\left(\sin{q_1} + \sin{q_2}\right)C^2_{1,\alpha} + \frac{1}{6}C^3_{1,\alpha} + \frac{1}{2}C_{1,\alpha}C^2_{1,\beta},\\
+	C_{3,\beta} & = \frac{b}{4\left(a+c\right)}\left(\sin{q_2} - \sin{q_1}\right)C^2_{1,\alpha} + \frac{1}{6}C^3_{1,\beta},\\
+	C_{3,h} & = \frac{bc}{4\left(a+c\right)}\left(\sin{q_2} - \sin{q_1}\right)C^2_{1,\alpha}.
 \end{aligned}
 \end{equation}
 
@@ -95,8 +251,8 @@
 
 \begin{equation}
 \begin{aligned}
-\frac{1}{L}S_2 &= \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}0 \\ -\sin{q_2}\\ 0\end{pmatrix} + \kappa^2\begin{pmatrix}\frac{a}{2L}C^2_{1,\beta} + \frac{b}{L}C_{1,\alpha}^2\\\frac{b}{L}C_{1,\alpha}C_{1,\beta} -\frac{b}{2L}C_{1,\alpha}^2\\ -\frac{1}{2}\sin^2{q_1} \\ \end{pmatrix} + \\
-& + \kappa^3\frac{1}{L}\begin{pmatrix}aC_{1,\beta}C_{2,\beta} + bC_{1,\alpha}C_{2,\beta} + bC_{2,\alpha}C_{1,\beta} \\ -bC_{1,\alpha}C_{2,\alpha} \\ -\frac{b}{2}\sin{q_1}C_{1,\alpha}^2\end{pmatrix}
+\frac{1}{L}S_2 &= \begin{pmatrix}0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}0 \\ -\sin{q_2}\\ 0\end{pmatrix} + \kappa^2\begin{pmatrix}\frac{a}{2L}C^2_{1,\beta} + \frac{b}{L}C_{1,\alpha}^2\\\frac{b}{L}C_{1,\alpha}C_{1,\beta} -\frac{b}{2L}C_{1,\alpha}^2\\ -\frac{1}{2}\sin^2{q_2} \\ \end{pmatrix} + \\
+& + \kappa^3\frac{1}{L}\begin{pmatrix}aC_{1,\beta}C_{2,\beta} + bC_{1,\alpha}C_{2,\beta} + bC_{2,\alpha}C_{1,\beta} \\ -bC_{1,\alpha}C_{2,\alpha} \\ +\frac{b}{2}\sin{q_2}C_{1,\alpha}^2\end{pmatrix}
 \end{aligned}
 \end{equation}
 
@@ -131,7 +287,7 @@
 
 \begin{equation}
 \begin{aligned}
-	\mu & = \frac{1}{4}C_{1,\alpha}\left(\sin{q_2} - \sin{q_1}\right) = \frac{L}{8b}\left(\cos{q_2}-\cos{q_1}\left(\sin{q_2}-\sin{q_1}\right)\right),\\
+	\mu & = \frac{1}{4}C_{1,\alpha}\left(\sin{q_2} - \sin{q_1}\right) = \frac{L}{8b}\left(\cos{q_2}-\cos{q_1}\right)\left(\sin{q_2}-\sin{q_1}\right),\\
 	\lambda & = \frac{1}{4}\left(2\sin{q_3}-\sin{q_1}-\sin{q_2}\right)C_{1,\alpha}
 \end{aligned}
 \end{equation},
@@ -150,7 +306,7 @@
 
 \begin{equation}
 \begin{aligned}
-	\delta_1 = C_{2,\alpha} - \frac{b}{2L}C^2_{1,\alpha},\quad C_{2,\alpha} + \frac{b}{2L}C^2_{1,\alpha},\quad \delta_3 = C_{2,\alpha}.
+	\delta_1 = C_{2,\alpha} - \frac{b}{2L}C^2_{1,\alpha},\quad \delta_2 = C_{2,\alpha} + \frac{b}{2L}C^2_{1,\alpha},\quad \delta_3 = C_{2,\alpha}.
 \end{aligned}
 \end{equation}
 
@@ -170,10 +326,10 @@
 
 \begin{equation}
 \begin{aligned}
-	\frac{1}{L}S_1^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_1 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_1 \\ \delta_1 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_1\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
-	-\mu \frac{b}{a+c}C_{1,\alpha} + \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
-	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\
-	C_{1,\beta}\gamma_1 + sq_1\delta_1
+	\frac{1}{L}S_2^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_2 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_2 \\ \delta_2 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_2\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
+	-\mu \frac{b}{a+c}C_{1,\alpha} - \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
+	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} + \mu C_{1,\alpha} \\
+	C_{1,\beta}\gamma_2 + sq_2\delta_2
 	\end{pmatrix}
 \end{aligned}
 \end{equation}
@@ -182,10 +338,10 @@
 
 \begin{equation}
 \begin{aligned}
-	\frac{1}{L}S_1^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_1 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_1 \\ \delta_1 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_1\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
-	-\mu \frac{b}{a+c}C_{1,\alpha} + \frac{b}{L}C_{1,\alpha}C_{2,\beta} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
-	\frac{a}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} - \mu C_{1,\alpha} \\
-	C_{1,\beta}\gamma_1 + sq_1\delta_1
+	\frac{1}{L}S_3^0 = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} + \kappa\begin{pmatrix}-C_{1,\beta} \\ -sq_3 \\ 0 \end{pmatrix} + \kappa^2\begin{pmatrix}\gamma_3 \\ \delta_3 \\ -\frac{1}{2}\left(C^2_{1,\beta} + sq^2_3\right)\end{pmatrix} + \\ \kappa^3\begin{pmatrix}
+	-\mu \frac{b}{a+c}C_{1,\alpha} - \frac{1}{L}C_{1,\beta}C_{2,h}\\
+	-\frac{c}{L}C_{1,\alpha}C_{2,\beta} + \frac{1}{L}C_{1,\alpha}C_{2,h} + \lambda C_{1,\alpha} \\
+	C_{1,\beta}\gamma_3 + sq_3\delta_3
 	\end{pmatrix}
 \end{aligned}
 \end{equation}
@@ -225,7 +381,7 @@
 Далее запишем уравнение моментов движения твердого тела в связанной системе координат. Уравнение моментов записывается относительно центра тяжести подвижной платформы с закрепленным объектом. Положение центра тяжести в системе координат платформы обозначим $X^0_C = \left[x_c, y_c, z_c\right]^T$. Тогда момент, создаваемый центральной опорой будет равен:
 \begin{equation}
 \label{eq:TorqueFromCentralSupport}
-M_S^0 = -X_C^0 \times F_S^0 = -\left(X_C^0 \times e_S\right)\left(f_0 - k_sh\right),
+M_S^0 = -X_C^0 \times F_S^0 = -\left(X_C^0 \times e_3\right)\left(f_0 - k_sh\right),
 \end{equation}
 
 где $F^0_S$ – сила, действующая на платформу со стороны центральной опоры, $e_3 = \left[0~0~1\right]^T$ -– единичный вектор, направленный по оси $Z$. В дальнейшем будут использоваться первые две компоненты векторов моментов, т.к. вращение по курсу не рассматривается. Для того, чтобы учесть этот факт, введем вспомогательную матрицу $E_{12}$:
@@ -299,7 +455,7 @@ y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 \end{aligned}
 \end{equation}
 
-Окончательно, равенство \ref{eq:AngularSpeedTurnOperatorDiff2} преобразуется к виду:
+Окончательно, равенство \ref{eq:AngularSpeedTurnOperatorDiff} преобразуется к виду:
 
 \begin{equation}
 \label{eq:AngularSpeedTurnOperatorDiff2}
@@ -318,12 +474,13 @@ y_c\begin{pmatrix}1 \\ 0\end{pmatrix}
 
 \begin{equation}
 \label{eq:AngularSpeedInMovingCS}
-E_{12}\Omega^0 = \begin{pmatrix}
+\Omega^0 = \begin{pmatrix}
 \Omega_x^0 \\ \Omega_y^0 \\ \Omega_z^0
 \end{pmatrix} =
-E_{12}\begin{pmatrix}
+\begin{pmatrix}
 \dot{\alpha}\cos{\beta} \\ \dot{\beta} \\ -\dot{\alpha}\sin{\beta}
-\end{pmatrix} =
+\end{pmatrix},\qquad
+E_{12}\Omega^0 =
 \begin{pmatrix}
 \dot{\alpha}\cos{\beta} \\ \dot{\beta}
 \end{pmatrix}
@@ -346,14 +503,14 @@ I_x & 0 & 0 \\ 0 & I_y & 0 \\ 0 & 0 & I_z
 \begin{equation}
 \label{eq:TorquesEqLeftInertialPart}
 E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \begin{pmatrix}I_x\ddot{\alpha}\cos{\beta} \\ I_y\ddot{\beta}\end{pmatrix} +
-\begin{pmatrix}\left(I_x-I_y-I_z\right)\dot{\beta} \\ \left(I_z-I_x\right)\dot{\alpha}\cos{\beta}\end{pmatrix}\dot{\alpha}\sin{\beta}
+\begin{pmatrix}\left(I_y-I_x-I_z\right)\dot{\beta} \\ \left(I_z-I_x\right)\dot{\alpha}\cos{\beta}\end{pmatrix}\dot{\alpha}\sin{\beta}
 \end{equation}
 
 Обозначим инерционные моменты $m_{\alpha}$ и $m_\beta$ для сокращения дальнейших выкладок:
 \begin{equation}
 \label{eq:TorquesInertial}
 \begin{aligned}
-& m_{\alpha} = I_x\ddot{\alpha}\cos{\beta} + \left(I_x-I_y-I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta} \\
+& m_{\alpha} = I_x\ddot{\alpha}\cos{\beta} + \left(I_y-I_x-I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta} \\
 & m_{\beta} = I_y\ddot{\beta} + \left(I_z-I_x\right)\dot{\alpha}^2\sin{\beta}\cos{\beta}
 \end{aligned}
 \end{equation}
@@ -365,19 +522,19 @@ E_{12}\left[I\dot{\Omega}^0 + \Omega^0 \times \left[I\Omega^0\right] \right] = \
 \begin{aligned}
 & F_1k_1 + F_2k_2 + F_3k_3 = \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right), \\
 & b\left(D_1k_1-D_2k_2\right)-Dky_c + S_y^0kz_c = \frac{1}{L}\left(m_{\alpha} + y_c\left(f_0 - k_sh\right)\right), \\
-& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_y^0kz_c = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right),
+& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_x^0kz_c = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right),
 \end{aligned}
 \right.
 \end{equation}
 
 где $D=\left[D_1~D_2~D_3\right],~F=\left[F_1~F_2~F_3\right], k=\left[k_1~k_2~k_3\right]^T,~S^0_x=\left(S^0_{1,x},~S^0_{2,x},~S^0_{3,x}\right)/L, S^0_y=\left(S^0_{1,y},~S^0_{2,y},~S^0_{3,y}\right)/L$.
 
-Прибавим ко второму уравнению в \ref{eq:KoefsLinearSystem1} правую часть первого, умноженную на $y_c$, к третьему –-- ту же правую часть, умноженную на $–x$. При этом для левой части второго и третьего уравнений заменим данное слагаемое на $Fk$ согласно равенству в первом уравнении. Таким образом преобразованные второе и третье уравнения системы \ref{eq:KoefsLinearSystem1}:
+Прибавим ко второму уравнению в \ref{eq:KoefsLinearSystem1} правую часть первого, умноженную на $y_c$, к третьему –-- ту же правую часть, умноженную на $-x_c$. При этом для левой части второго и третьего уравнений заменим данное слагаемое на $Fk$ согласно равенству в первом уравнении. Таким образом преобразованные второе и третье уравнения системы \ref{eq:KoefsLinearSystem1}:
 \begin{equation}
 \label{eq:KoefsLinearSystemSimplification}
 \begin{aligned}
 & b\left(D_1k_1-D_2k_2\right)-Dky_c + S_y^0kz_c + Fky_c = \frac{1}{L}\left(m_{\alpha} + y_c\left(f_0 - k_sh\right)\right) + \\ & \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)y_c, \\
-& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_y^0kz_c - Fkx_c = \\ & = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right) - \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)x_c,
+& a\left(D_1k_1+D_2k_2\right)-cD_3k_3+Dkx_c-S_x^0kz_c - Fkx_c = \\ & = \frac{1}{L}\left(m_{\beta} - x_c\left(f_0 - k_sh\right)\right) - \frac{1}{L}\left(m\ddot{h}+k_sh-f_0+mg\right)x_c,
 \end{aligned}
 \end{equation}
 
@@ -425,10 +582,10 @@ Q_i  = \begin{pmatrix}
 \begin{aligned}
 & Q_i = k_iG_i,~i=1,\dots,3 \\
 & G_1 = R \left\{ L\sin{q_1}-R\sin{q_1}\cos{q_1}-R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_1} + \frac{1}{2L}\sin^3{q_1} \right] \right. +\\
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right)
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_1}+\cos{q_1}\cos{q_2}\right)
 \right\} \\
-& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}-R^2 \left[ \frac{2}{8b} {\left( \cos{q_2}-\cos{q_2} \right)}^2 \cos{q_2} + \frac{2}{2L}\sin^3{q_2} \right] \right. +\\
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_2}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_2}\cos{q_2}\right)
+& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}+R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_2} - \frac{1}{2L}\sin^3{q_2} \right] \right. -\\
+& \left.- \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right)
 \right\} \\
 & G_3 = R\left\{L\sin{q_3}-R\sin{q_3}\cos{q_3}-R^2\frac{1}{2L}\sin^3q_3\right\}
 \end{aligned}
@@ -515,7 +672,7 @@ Q_i  = \begin{pmatrix}
 Введем обозначение для нормированного определителя матрицы $A_0$:
 \begin{equation}
 \begin{aligned}
-	\Delta = \Delta/b = 2aD_1D_2F_3 + cD_3\left(D_1F_2 + D_2F_1\right)
+	\Delta = \Delta_0/b = 2aD_1D_2F_3 + cD_3\left(D_1F_2 + D_2F_1\right)
 \end{aligned}
 \end{equation}
 
@@ -531,7 +688,7 @@ Q_i  = \begin{pmatrix}
 
 \begin{equation}
 \begin{aligned}
-	C_0 = \begin{pmatrix}0 \\ S_y^0 -S_x^0\end{pmatrix}A_0^{-1} = \frac{1}{\Delta}\begin{pmatrix}
+	C_0 = \begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}A_0^{-1} = \frac{1}{\Delta}\begin{pmatrix}
 	0 & 0 & 0 \\ S_y^0A_1 & S_y^0A_2 & S_y^0A_3 \\ -S_x^0A_1 & -S_x^0A_2 & -S_x^0A_3
 	\end{pmatrix}
 \end{aligned}
@@ -541,7 +698,7 @@ Q_i  = \begin{pmatrix}
 
 \begin{equation*}
 	\begin{aligned}
-		\frac{1}{\Delta}\begin{pmatrix}S_y^0A_1 \\ -S_x^0\end{pmatrix} & = \frac{2\left(a+c\right)}{\Delta}\left\lbrace\begin{pmatrix}\sin\alpha\cos\beta \\ \sin\beta\end{pmatrix}- \right.\\
+		\frac{1}{\Delta}\begin{pmatrix}S_y^0A_1 \\ -S_x^0A_1\end{pmatrix} & = \frac{2\left(a+c\right)}{\Delta}\left\lbrace\begin{pmatrix}\sin\alpha\cos\beta \\ \sin\beta\end{pmatrix}- \right.\\
 		& \left. -\kappa\begin{pmatrix}1\\0\end{pmatrix}\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)}\left(\cos\alpha-\kappa^2C_{1,\beta}^2\right) - \right.\\
 		& \left. -\frac{1}{2}\kappa^2 \begin{pmatrix} \sin{\alpha} \\ \sin{\beta} \end{pmatrix} \frac{2a\sin^2{q_3}+c\left(\sin^2{q_1}+\sin^2{q_2}\right)}{2\left(a+c\right)}-\kappa^2 \begin{pmatrix} \sin{\alpha} \\ 0 \end{pmatrix} C^2_{1,\beta} + \right.\\
 		& \left. \frac{1}{2} \kappa^3 \begin{pmatrix} 1 \\ 0 \end{pmatrix} \frac{2asq_3 \left(sq_1^2+sq_2^2 \right) + csq_1\left( sq_2^2+sq_3^2 \right) + csq_2\left(sq_1^2+sq_3^2\right)}{2\left(a+c\right)} \right\rbrace\\
@@ -549,7 +706,7 @@ Q_i  = \begin{pmatrix}
 		& -\kappa^2\frac{a+c}{L}C_{1,\alpha}\\
 		S_y^0 A_3 & \approx \kappa\left(2\sin{q_3} - \sin{q_1} - \sin{q_2}\right) \left(1 - \frac{1}{2}\kappa^2\left(C^2_{1,\alpha} + C^2_{1,\beta}\right)\right) + \\
 		& + \frac{1}{2}\kappa^3 \left\lbrace \sin{q_1}\left(\sin^2{q_3} + sq^2_2\right) + \sin{q_2}\left(\sin^2{q_3} + sq^2_1\right)\right.\\
-		&\left. -\sin{q_3}\left(\sin^2{q_1} + \sin^2{q_2} + sq^2_1 + sq^2_2\right)\right\rbrace
+		&\left. -\sin{q_3}\left(\sin^2{q_1} + \sin^2{q_2} + sq^2_1 + sq^2_2\right)\right\rbrace \\
 		S^0_x A_2 & \approx \frac{1}{2b}\kappa^3 C_{1,\beta}c\left(\sin^2{q_2} - \sin^2{q_1}\right) \\
 		S^0_x A_3 & \approx \frac{1}{2}\kappa^3 C_{1,\beta}\left(2\sin^2{q_3} - \sin^2{q_1} - \sin^2{q_2}\right) + \kappa^2\frac{a+c}{L}C^2_{1,\beta} + \\
 		& + \kappa^2\frac{a+c}{L}\left(C^2_{1,\beta} + 2\kappa C_{1,\beta}C_{2,\beta}\right)
@@ -563,7 +720,7 @@ Q_i  = \begin{pmatrix}
 	C_0 & \approx \frac{2\left(a+c\right)}{\Delta}\left\lbrace \begin{pmatrix}
 	0 & 0 & 0 \\ \sin{\alpha}\cos{\beta} & 0 & 0 \\ \sin{\beta} & 0 & 0
 	\end{pmatrix} + \right.\\
-	&\left. + k\begin{pmatrix}
+	&\left. + \kappa\begin{pmatrix}
 	0 & 0 & 0 \\
 	-\frac{2a\sin{q_3}+c\sin{q_1}+c\sin{q_2}}{2\left(a+c\right)} & \frac{\sin{q_2}-\sin{q_1}}{2b} & \frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{2\left(a+c\right)}\\
 	0 & 0 & 0 \\
@@ -595,13 +752,13 @@ Q_i  = \begin{pmatrix}
 
 \begin{equation}
 \begin{aligned}
-	E_i & \approx \frac{1}{2}\kappa^2 \left(-q^2_i - C^2_{1,\beta} + \sin^2_{q_i}\right) + \kappa^3 \left\lbrace C_{1,\beta}\gamma_i + sq_i\delta_i + \frac{b_i}{2L}\sin{q_i}C^2_{1,\alpha} \right\rbrace \\
+	E_i & \approx \frac{1}{2}\kappa^2 \left(-q^2_i - C^2_{1,\beta} + \sin^2{q_i}\right) + \kappa^3 \left\lbrace C_{1,\beta}\gamma_i + sq_i\delta_i + \frac{b_i}{2L}\sin{q_i}C^2_{1,\alpha} \right\rbrace \\
 	& + \kappa^2\left[C_{1,\alpha}\sin{q_i} - \frac{1}{2}\left(C^2_{1,\alpha} + C^2_{1,\beta}\right)\right] + \\
 	& + \kappa^3\left\lbrace C_{2,\alpha}\sin{q_i} + \frac{a}{2L}C^3_{1,\beta} - \left(C_{1,\beta}C_{2,\beta} + C_{1,\beta}C_{2,\alpha}\right)\right\rbrace
 \end{aligned}
 \end{equation},
 
-где $b_i$ обозначает следующее: $b_1 = b,~b_2 = -b,~0$. Компоненты строки $E$ имеют второй порядок относительно величины $\kappa$.
+где $b_i$ обозначает следующее: $b_1 = b,~b_2 = -b,~b_3 = 0$. Компоненты строки $E$ имеют второй порядок относительно величины $\kappa$.
 
 Оценим каждую компоненту коэффициента $EA^{-1}_0$. Первая компонента:
 \begin{equation}
@@ -617,7 +774,7 @@ EA^{-1}_0e_1 \approx & \kappa^2\left[\left(C_{1,\alpha} + \kappa C_{2,\alpha} - 
 Вторая компонента:
 \begin{equation}
 \begin{aligned}
-EA^{-1}_0 e_2 & = \frac{1}{\Delta}A_2 = \frac{a+c}{\Delta b}D_3\left(D_1F_2 - D_2F_1\right) \approx\\
+EA^{-1}_0 e_2 & = \frac{1}{\Delta}EA_2 = \frac{a+c}{\Delta b}D_3\left(D_1F_2 - D_2F_1\right) \approx\\
 & \approx \frac{2\left(a+c\right)}{\Delta}\kappa^2D_3C_{1,\alpha}\left\lbrace \frac{\sin{q_1} - \sin{q_2}}{2b}\left(1 - \frac{1}{2}\kappa C_{2,\alpha}\right) + \kappa \frac{1}{4L}\left(2C^2_{1,\beta} + C^2_{1,\alpha}\right)\right\rbrace.
 \end{aligned}
 \end{equation}
@@ -626,7 +783,7 @@ EA^{-1}_0 e_2 & = \frac{1}{\Delta}A_2 = \frac{a+c}{\Delta b}D_3\left(D_1F_2 - D_
 \begin{equation}
 \begin{aligned}
 EA^{-1}_0 e_3 & \approx -\kappa\sin{\alpha}\cos^2{\beta}\frac{2\sin{q_3} - \sin{q_1} - \sin{q_2}}{\Delta} - \\
-& -\frac{1}{2\Delta}\kappa^4 \left\lbrace -\frac{1}{2}C^2_{1,\beta}\left(2\sin^2{q_3} - \sin^2_{q_1} - \sin^2{q_2}\right) \right. \\
+& -\frac{1}{2\Delta}\kappa^4 \left\lbrace -\frac{1}{2}C^2_{1,\beta}\left(2\sin^2{q_3} - \sin^2{q_1} - \sin^2{q_2}\right) \right. \\
 & \left. -C^2_{1,\alpha}\left(\sin{q_3} - \sin{q_1}\right)\left(\sin{q_3} - \sin{q_2}\right)\right. \\
 & \left. +C_{1,\alpha}\left(\sin{q_1} - \sin{q_3}\right)\left(sq^2_2 - \sin{q_1}\sin{q_3}\right)\right. \\
 & \left. -C_{1,\alpha}\left(\sin{q_2} - \sin{q_3}\right)\left(sq^2_1 - \sin{q_2}\sin{q_3}\right)\right\rbrace
@@ -635,18 +792,35 @@ EA^{-1}_0 e_3 & \approx -\kappa\sin{\alpha}\cos^2{\beta}\frac{2\sin{q_3} - \sin{
 
 
 \section{Оценка параметров уравнений обратной задачи динамики}
-Практически все параметры в TBD (10) определить на практике с достаточной точностью не представляется возможным из-за сложностей в организации процесса измерения. В связи с этим, целесообразно произвести параметрическую идентификацию, используя данные с датчиков, установленных на СП.
+Практически все параметры в \ref{eq:KoefsLinearSystem2} определить на практике с достаточной точностью не представляется возможным из-за сложностей в организации процесса измерения. В связи с этим, целесообразно произвести параметрическую идентификацию, используя данные с датчиков, установленных на СП.
 
 \subsection{Идентификация параметров в статике}
 Параметрами, в большей степени влияющими на результат расчета движущих моментов являются вес закрепленного на платформе объекта, коэффициент жесткости $k_s$, начальное натяжение пружины $f_0$ и смещение центра тяжести $(x_c, y_c, z_c)$. Эти величины не меняются в течение длительного времени, поэтому целесообразно произвести идентификацию объекта на основе данных эксперимента.
-	Данные параметры можно определить в статическом режиме, т.е. измерив вращающие моменты в нескольких стационарных положениях платформы. При этом уравнения системы (11) путем обнуления производных принимают вид:
+	Данные параметры можно определить в статическом режиме, т.е. измерив вращающие моменты в нескольких стационарных положениях платформы.
+
+В стационарном положении $\dot{\alpha} = \dot{\beta} = \ddot{\alpha} = \ddot{\beta} = \dot{h} = \ddot{h} = 0$, поэтому в правой части \ref{eq:KoefsLinearSystem2} обращаются в нуль все три инерционных слагаемых:
+\begin{equation}
+\label{eq:StaticLimit}
+m\ddot{h} \to 0, \qquad
+m_{\alpha} = I_x\ddot{\alpha}\cos{\beta} + \left(I_y-I_x-I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta} \to 0, \qquad
+m_{\beta} = I_y\ddot{\beta} + \left(I_z-I_x\right)\dot{\alpha}^2\sin{\beta}\cos{\beta} \to 0,
+\end{equation}
+а слагаемые $y_c(m\ddot{h} + mg)$ и $-x_c(m\ddot{h} + mg)$ переходят в $y_cmg$ и $-x_cmg$. Левая часть при этом не меняется: две матрицы при $z_c$ и при $E$ лишь объединяются в одну,
+\begin{equation}
+\label{eq:StaticRegroup}
+\begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}kz_c +
+\begin{pmatrix}0 \\ -y_c \\ x_c \end{pmatrix}Ek =
+\begin{pmatrix}0 \\ S_y^0z_c - y_cE \\ -S_x^0z_c + x_cE\end{pmatrix}k .
+\end{equation}
+
+Таким образом, уравнения системы \ref{eq:KoefsLinearSystem2} путем обнуления производных принимают вид:
 \begin{equation}
 \label{eq:LinearSystemStatic}
 \begin{aligned}
 & \begin{pmatrix}
 \bar{F_1} & \bar{F_2} & \bar{F_3} \\
-\bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
-\bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
+b\bar{D_1} & -b\bar{D_2} & 0 \\
+a\bar{D_1} & a\bar{D_2} & -c\bar{D_3}
 \end{pmatrix}\bar{k} +
 \begin{pmatrix}0 \\ \bar{S}_y^0z_c -y_c\bar{E} \\ -\bar{S}_x^0z_c+x_c\bar{E}\end{pmatrix}\bar{k} = \frac{1}{L}
 \begin{pmatrix}
@@ -666,8 +840,8 @@ y_cmg \\-x_cmg
 \end{pmatrix} =
 \begin{pmatrix}
 \bar{F_1} & \bar{F_2} & \bar{F_3} \\
-\bar{b}\bar{D_1} & -\bar{b}\bar{D_2} & 0 \\
-\bar{a}\bar{D_1} & \bar{a}\bar{D_2} & -\bar{c}\bar{D_3}
+b\bar{D_1} & -b\bar{D_2} & 0 \\
+a\bar{D_1} & a\bar{D_2} & -c\bar{D_3}
 \end{pmatrix}\bar{k}
 \end{equation}
 
@@ -677,7 +851,7 @@ y_cmg \\-x_cmg
 \begin{aligned}
 & \bar{p_1} = \frac{1}{L}\left(mg - f_0 + k_sh\right)\\
 & \bar{p_2} = \left(\frac{mg}{L}+\bar{E}\bar{k}\right)y_c - \bar{S}^0_y\bar{k}z_c \\
-& \bar{p_3} = \left(\frac{mg}{L}+\bar{E}\bar{k}\right)x_c + \bar{S}^0_x\bar{k}z_c
+& \bar{p_3} = \bar{S}^0_x\bar{k}z_c - \left(\frac{mg}{L}+\bar{E}\bar{k}\right)x_c
 \end{aligned}
 \end{equation}
 
@@ -685,20 +859,25 @@ y_cmg \\-x_cmg
 
 Вместо величин $\left(x_c, y_c\right)$ определяются сразу произведения $\left(x_c, y_c\right) = \left(x_c, y_c\right) mg/L$.
 
-Для определения параметров используется метод наименьших квадратов с дополнительными весовыми множителями TBD [3]:
+Для предварительной (раздельной) оценки параметров применяется метод наименьших квадратов с весовыми множителями \cite{Graupe}. Невязки записываются непосредственно по \ref{eq:AdditionalParamsRightPart}:
 
 \begin{equation}
 \label{eq:LeastSquareMethodFormulation}
 \begin{aligned}
-& J_c\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
-c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}-\left(\bar{S}_y^0\bar{k}\right)_iz_c  \bar{y_c}\right|^2\right], \\
-& J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, \\
-& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\
-& J_c\left(k_s,~f_0\right)\rightarrow\min.
+& J_{xyz}\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
+c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2
++ c_{i,y}\left|\bar{p}_{2,i}+\left(\bar{S}_y^0\bar{k}\right)_iz_c - \bar{y_c}\right|^2\right]
+\rightarrow\min, \\
+& J_{sf}\left(k_s,~f_0\right)=\sum_{j=1}^m{\left|\bar{p}_{1,j}-\frac{k_s\bar{h_j}}{L}-\frac{mg-f_0}{L}\right|}^2
+\rightarrow\min.
 \end{aligned}
 \end{equation}
 
-где $c_{i,x}$ и $c_{i,y}$  – весовые множители, $i = 1,\dots,n$ – номера стационарных участков.
+где $c_{i,x}$ и $c_{i,y}$ -- весовые множители, $i = 1,\dots,n$ -- номера стационарных участков, вошедших в оценивание смещений центра тяжести, $j = 1,\dots,m$ -- номера участков, вошедших в оценивание параметров пружины.
+
+Обратим внимание на множитель $1/L$ при $k_s$. Уравнение сил \ref{eq:DynamicVerticalForcesEq2} даёт $\bar{p}_1 = \left(k_s\bar{h} + mg - f_0\right)/L$, поэтому коэффициентом при $k_s$ служит $\bar{h}/L$, а не $\bar{h}$. Если это деление опустить, оценивается величина $k_s/L$, а не сама жёсткость пружины.
+
+Раздельная схема требует, чтобы вектор $\bar{k}$ вычислялся непосредственно из измерений, $\bar{k}_i = \bar{m}_i/\bar{G}_i$, и потому неприменима в конфигурациях, где кривошип находится вблизи мёртвой точки и $G_i \to 0$. Основной (групповой) метод, свободный от этого ограничения, рассмотрен в разделе \ref{sec:GroupMethod}.
 
 \subsection{Идентификация в режиме гармонических колебаний}
 Предположим, что в записи имеются несколько участков, на которых углы крена и тангажа меняются периодически. Экспериментально установлено, что среди инерциальных моментов сил только чистые вторые производные от углов крена и тангажа могут принимать значения, влияющие на общий суммарный момент сил. Это значит, что:
@@ -722,13 +901,13 @@ m_{s,\beta} & \approx 0,\\
 \end{equation}
 
 где
-$k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}\cos{\beta}\end{pmatrix},~k_{\beta}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ 0 \\ I_y\ddot{\alpha}\cos{\beta}\end{pmatrix},~$
+$k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}\cos{\beta} \\ 0\end{pmatrix},~k_{\beta}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ 0 \\ I_y\ddot{\beta}\end{pmatrix},~$
 
 и
 
 \begin{equation}
 \begin{aligned}
-	A & = \begin{pmatrix}F_1 & F_2 & F_3 \\ bD_1 & -bD_2 & 0 \\ aD_1 & aD_2 & -cD_2\end{pmatrix}+
+	A & = \begin{pmatrix}F_1 & F_2 & F_3 \\ bD_1 & -bD_2 & 0 \\ aD_1 & aD_2 & -cD_3\end{pmatrix}+
 	\begin{pmatrix}0 \\ S_y^0 \\ -S_x^0\end{pmatrix}z_c + \begin{pmatrix}0 \\ -y_c \\ x_c\end{pmatrix}E, \\
 	B &= \begin{pmatrix}
 	\frac{1}{L}m\ddot{h} + \frac{1}{L}k_sh + \bar{f}\\
@@ -737,6 +916,8 @@ $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}
 	\end{pmatrix}
 \end{aligned}
 \end{equation}
+
+Здесь $\bar{f} = \left(mg - f_0\right)/L$, $\bar{x_c} = x_c\,mg/L$, $\bar{y_c} = y_c\,mg/L$ -- константы, оценённые на стационарных участках.
 
 Оценка моментов сил на валах кривошипов раскладывается на три компоненты:
 
@@ -784,3 +965,148 @@ $k_0 = A^{-1}B,~k_{\alpha}=A^{-1}\frac{1}{L}\begin{pmatrix}0 \\ I_x\ddot{\alpha}
 %	....
 %\end{aligned}
 %\end{equation}
+
+\section{Групповой метод оценивания}
+\label{sec:GroupMethod}
+
+Раздельная схема предыдущего раздела требует вычислять $\bar{k}_i = \bar{m}_i/\bar{G}_i$ и потому неустойчива при $G_i \to 0$. Групповой метод снимает это ограничение: усилия в шатунах переводятся из вычисляемых величин в оцениваемые, а связь с измеренными моментами накладывается как мягкое ограничение.
+
+Введём вектор неизвестных
+\begin{equation}
+\tau = \operatorname{col}\left(k_1,\ldots,k_n,~k_s,~\bar{f},~\bar{x_c},~\bar{y_c}\right)
+\end{equation}
+размерности $3n+4$ и будем минимизировать
+\begin{equation}
+\label{eq:GroupFunctional}
+J\left(\tau, z_c\right) =
+\underbrace{\sum_{i=1}^{n}\left\|A_i\left(z_c\right)k_i + M_i\theta\right\|^2}_{\text{блок 1: равновесие}}
++ \gamma^2\underbrace{\sum_{i=1}^{n}\left\|m_i - G_i\circ k_i\right\|^2}_{\text{блок 2: измерения}},
+\end{equation}
+где $\theta = \operatorname{col}\left(k_s,\bar{f},\bar{x_c},\bar{y_c}\right)$, $\circ$ -- покомпонентное умножение,
+\begin{equation}
+A_i\left(z_c\right) = A_{0,i} + \begin{pmatrix}0 \\ S^0_{y,i} \\ -S^0_{x,i}\end{pmatrix}z_c,
+\qquad
+M_i = -\begin{pmatrix}
+\bar{h}_i/L & 1 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & -1 & 0
+\end{pmatrix}.
+\end{equation}
+При фиксированном $z_c$ задача линейно-квадратичная и решается явно; $z_c$ перебирается по сетке.
+
+Существенно, что \textbf{блок 1 сам по себе не содержит информации о параметрах}. Каждая матрица $A_i$ обратима (для исследуемого стенда $\operatorname{cond}A_{0} \approx 3$ во всех рабочих конфигурациях), поэтому при любом $\theta$ можно положить $k_i = -A_i^{-1}M_i\theta$ и обратить блок 1 в нуль. Вся информация о $\theta$ приходит из блока 2, а множитель $\gamma$ переключает между двумя оценивателями:
+\begin{itemize}
+\item $\gamma \to \infty$: $k_i = m_i/G_i$ берётся из измерений, $\theta$ подгоняется под уравнения равновесия (equation error). Это в точности раздельная схема \ref{eq:LeastSquareMethodFormulation}; невязка по моментам тождественно равна нулю.
+\item $\gamma \to 0$: $k_i$ следует уравнениям равновесия, $\theta$ подгоняется так, чтобы расчётные моменты $G_i\circ k_i$ совпали с измеренными (output error). Невязка по моментам остаётся и поддаётся интерпретации.
+\end{itemize}
+На идеальной модели оба предела дают одно и то же. Расхождение между ними служит мерой неадекватности модели и потому подлежит публикации наряду с самими оценками.
+
+\section{Критерий отбора стационарных участков}
+
+Момент на валу $i$-го кривошипа равен $Q_i = k_iG_i$, причём $G_i \propto \sin{q_i}$. При $q_i \to 0$ кривошип приходит в мёртвую точку, $G_i \to 0$, и момент на валу обращается в нуль независимо от усилия в шатуне. Такие конфигурации не несут информации об оцениваемых параметрах и должны исключаться.
+
+Вместо перечисления номеров участков вручную используется формальный критерий: участок допускается к оцениванию, если
+\begin{equation}
+\label{eq:SegmentCriterion}
+\min_{i=1,2,3}\left|G_i\right| > G_{\min}.
+\end{equation}
+Для исследуемого стенда при $G_{\min} = 0{,}02$ критерий отбирает те же участки $11-24$, что были выбраны ранее по содержательным соображениям. На отобранных участках $\left|G_i\right| = 0{,}05\ldots0{,}08$, на отброшенных -- до $10^{-5}$. Средняя ошибка воспроизведения моментов составляет $23$~Н$\cdot$м на отобранных участках против $75$~Н$\cdot$м на отброшенных при максимуме $287$~Н$\cdot$м.
+
+Отдельно отметим участок $11$ -- первый после выхода из мёртвой точки. Невязки на нём ($+59{,}8$, $-66{,}4$, $+29{,}6$~Н$\cdot$м) втрое превышают типичные, что согласуется с наблюдением о непопадании в общую регрессионную зависимость при первом переходе от $q = 0$.
+
+\section{Потери в приводе}
+
+\subsection{Место включения в модель}
+
+Величина $Q_i = k_iG_i$ есть момент, который механизм требует от вала кривошипа. Измеряется же электромагнитный момент двигателя, пересчитанный через передаточное число редуктора. Потери в редукторе и собственные механические потери двигателя лежат между этими двумя величинами, поэтому модель измерения принимает вид
+\begin{equation}
+\label{eq:FrictionModel}
+Q_i^{\text{изм}} = k_iG_i + M_{\text{тр},i}\operatorname{sign}\dot{q}_i + J_{\text{прив}}\ddot{q}_i ,
+\end{equation}
+где $M_{\text{тр},i}$ -- момент потерь, $J_{\text{прив}}$ -- приведённая к валу кривошипа инерция ротора (см. следующий раздел). Слагаемые ортогональны: первое синфазно скорости, второе -- ускорению.
+
+\subsection{Проверка на гармонических участках}
+
+Невязка $r = Q^{\text{изм}} - kG$ проверена против трёх конкурирующих моделей, каждая с двумя параметрами:
+\begin{equation}
+r = c_0 + F_c\operatorname{sign}\dot{q}, \qquad
+r = c_0 + C_v\dot{q}, \qquad
+r = c_0 - \tau\,\frac{d}{dt}\left(kG\right).
+\end{equation}
+Решающим критерием служит не $R^2$ на отдельном участке, а постоянство параметра между частотами: истинный механизм даёт одно и то же значение на всех частотах.
+
+\begin{center}
+\begin{tabular}{l|cccc|c}
+привод 1 & $0{,}110$~Гц & $0{,}391$~Гц & $0{,}439$~Гц & $0{,}635$~Гц & разброс\\
+\hline
+$F_c$, Н$\cdot$м & $61{,}0$ & $79{,}1$ & $97{,}9$ & $80{,}0$ & $16\%$\\
+$C_v$, Н$\cdot$м$\cdot$с & $531$ & $238$ & $183$ & $190$ & $50\%$\\
+$\tau$, мс & $1054$ & $265$ & $206$ & $156$ & $88\%$\\
+\end{tabular}
+\end{center}
+
+Транспортная задержка исключается: чтобы объяснить невязку, $\tau$ должна меняться в семь раз монотонно с частотой. Фазовый сдвиг первой гармоники составляет $29\ldots46^{\circ}$ и практически не зависит от частоты в диапазоне $0{,}11\ldots0{,}64$~Гц, что несовместимо с задержкой в канале измерения, но характерно для сухого трения: его момент примерно постоянен и входит в квадратуре к основному, гравитационному, который от частоты также почти не зависит.
+
+Оценка момента потерь составляет $48\ldots67$~Н$\cdot$м на выходном валу. Независимая проверка по паспорту мотор-редуктора: при передаточном числе $i = 81{,}5$, номинальном моменте двигателя $M_1 = 10{,}2$~Н$\cdot$м и моменте на выходном валу $M_2 = 773$~Н$\cdot$м КПД равен $M_2/(M_1 i) = 0{,}930$, что соответствует моменту потерь $M_1 i - M_2 = 58{,}3$~Н$\cdot$м. Собственные механические потери двигателя добавляют ещё $8\ldots17$~Н$\cdot$м, приведённых к выходному валу.
+
+\subsection{Проверка в статике}
+
+Модель \ref{eq:FrictionModel} в статическом режиме даёт три дополнительных неизвестных $F_{c,j}$, $j=1,2,3$, входящих линейно; знаки $\operatorname{sign}\dot{q}$ определяются по направлению подхода к стационарному положению и считываются из записи углов.
+
+Оценивание даёт величины не более $20$~Н$\cdot$м, причём знаки меняются при переходе от $\gamma = 0{,}1$ к большому $\gamma$, а доверительные интервалы в большинстве случаев накрывают нуль. Статическое трение по имеющимся данным не идентифицируется, и это физически объяснимо: при остановке сила трения не остаётся на максимуме, а принимает любое значение внутри зоны застоя, необходимое для равновесия.
+
+Практическое следствие: монотонный подход ко всем стационарным положениям не внёс заметного смещения в оценки. Добавление трения в статическую модель сдвигает $x_c$, $y_c$, $f_0$ меньше, чем на ширину их доверительных интервалов, и при этом расширяет интервалы для $k_s$ и $z_c$. В статическую модель трение включать не следует.
+
+\section{Приведённая инерция ротора}
+
+Допущение о пренебрежимости массоинерционных характеристик вспомогательных звеньев не распространяется на ротор двигателя: при передаточном числе $i = 81{,}5$ приведение к валу кривошипа идёт с множителем $i^2 = 6642$. Для двигателя мощностью $1{,}5$~кВт с тормозом $J_m = 32\cdot10^{-4}$~кг$\cdot$м$^2$, что даёт
+\begin{equation}
+J_{\text{прив}} = J_m i^2 \approx 21{,}3~\text{кг}\cdot\text{м}^2 .
+\end{equation}
+
+Вклад в момент на валу растёт как $f^2$:
+
+\begin{center}
+\begin{tabular}{l|cccc}
+частота, Гц & $0{,}110$ & $0{,}391$ & $0{,}439$ & $0{,}635$\\
+\hline
+$J_{\text{прив}}\ddot{q}$, Н$\cdot$м & $2{,}2$ & $21{,}4$ & $44{,}2$ & $57{,}4$\\
+доля от расчётной амплитуды & $2{,}5\%$ & $15\%$ & $19\%$ & $29\%$\\
+\end{tabular}
+\end{center}
+
+На гармонических участках движение практически одностепенное, поэтому $\ddot{q}_i$ пропорционально $\ddot{\alpha}$, и слагаемое $J_{\text{прив}}\ddot{q}$ почти коллинеарно слагаемому $c_xI_x\ddot{\alpha}\cos{\beta}$. Разделить их по имеющимся данным нельзя: подгонка коэффициентов $c_x$, $c_y$ уже впитала приведённую инерцию ротора. Следовательно, настроенные $c_x$ и $c_y$ оценивают не моменты инерции кабины, а их сумму с приведённой инерцией привода.
+
+Величина $J_{\text{прив}}$ известна из паспорта и не подлежит оцениванию: её место -- в известной части модели. Вычитание $J_{\text{прив}}\ddot{q}$ из измеренного момента до настройки $c_x$, $c_y$ устраняет систематическую погрешность до $29\%$ и не требует новых экспериментов.
+
+\section{Результаты оценивания}
+
+Доверительные интервалы получены ресэмплингом стационарных участков (бутстрэп, 200 выборок, уровень $90\%$). В интервалы включён разброс по вариантам метода: $\gamma = 0{,}1$ и $\gamma \to \infty$, с учётом трения и без него.
+
+\begin{center}
+\begin{tabular}{l|c|c}
+параметр & оценка & $90\%$ интервал\\
+\hline
+$f_0$, Н -- преднатяг пружины & $14\,700$ & $14\,500\ldots14\,800$\\
+$z_c$, м -- высота центра тяжести & $0{,}87$ & $0{,}84\ldots0{,}91$\\
+$y_c$, см -- поперечное смещение & $-6{,}8$ & $-7{,}15\ldots-6{,}21$\\
+$x_c$, см -- продольное смещение & $-0{,}67$ & $-0{,}79\ldots-0{,}52$\\
+$k_s$, Н/м -- жёсткость пружины & $\approx13\,000$ & $11\,000\ldots18\,400$\\
+\end{tabular}
+\end{center}
+
+Пружина несёт $14{,}7$~кН из $20{,}1$~кН веса кабины, то есть $73\%$.
+
+Невязка по моментам при $\gamma = 0{,}1$: среднее $17$~Н$\cdot$м, СКО $23$~Н$\cdot$м, максимум $66$~Н$\cdot$м при рабочих моментах $200\ldots500$~Н$\cdot$м. Эта величина и служит показателем качества модели в статике.
+
+Слабо определённым остаётся лишь коэффициент жёсткости ($\pm30\%$). Причина структурная: $k_s$ входит только через произведение $k_s\bar{h}/L$, а участки с большим вертикальным ходом (номера $1-10$, $h$ от $-0{,}145$ до $+0{,}033$~м) непригодны из-за мёртвых точек. Для уточнения жёсткости требуется отдельная серия с вертикальным перемещением при углах кривошипов вдали от нуля.
+
+\section{Замечания к расчётным реализациям}
+
+При сверке MATLAB- и Python-версий выявлены три расхождения.
+
+\textbf{Коэффициент жёсткости.} В \texttt{calc\_Jmin\_zc.m} коэффициентом при $k_s$ служит $\bar{h}$, тогда как уравнение сил требует $\bar{h}/L$. Поэтому соответствующая компонента вектора $\tau$ равна $k_s/L$, а не $k_s$: опубликованное значение $24\,606$ отвечает истинной жёсткости $24\,606\cdot L \approx 13\,800$~Н/м. Дополнительно, при расчёте правой части $B$ слагаемое с $k_s$ делится на $L$ повторно.
+
+\textbf{Коэффициент $C_{2,h}$.} В \texttt{KinematicDirProb.m} и в настоящем выводе коэффициент при $\sin^2{q_3}$ равен $a$; в \texttt{ident\_parameters.m} в этом месте стоит $2a$. Проверка алгеброй подтверждает $a$. Расхождение влияет на поправки порядка $\kappa^3$ к $S^0_x$ и $S^0_y$.
+
+\textbf{Перекрёстные инерционные члены.} Выражения $\left(I_y-I_x-I_z\right)\dot{\alpha}\dot{\beta}\sin{\beta}$ и $\left(I_z-I_x\right)\dot{\alpha}^2\sin{\beta}\cos{\beta}$ в расчётных реализациях опущены. На имеющихся данных это оправдано: $\left|\beta\right| \le 3^{\circ}$, вклад слагаемых порядка $1$~Н$\cdot$м против сотен, -- но в изложении отбрасывание следует оговаривать.

@@ -1,0 +1,41 @@
+%%% Отдельный документ: сводка всех уравнений диссертации (Dissertation/all_equations.tex)
+%%% Использует преамбулу диссертации; сборка: make all_equations
+\documentclass[a4paper,14pt,oneside,openany]{memoir}
+
+\input{common/setup}            % общие настройки шаблона
+\input{common/packages}         % Пакеты общие для диссертации и автореферата
+\synopsisfalse                      % Этот документ --- не автореферат
+\input{Dissertation/dispackages}    % Пакеты для диссертации
+\input{Dissertation/userpackages}   % Пакеты для специфических пользовательских задач
+
+\input{Dissertation/setup}      % Упрощённые настройки шаблона
+
+\input{common/newnames}         % Новые переменные, для всего проекта
+
+\input{common/data}             % Основные сведения
+\input{common/fonts}            % Определение шрифтов (частичное)
+\input{common/styles}           % Стили общие для диссертации и автореферата
+\input{Dissertation/disstyles}  % Стили для диссертации
+\input{Dissertation/userstyles} % Стили для специфических пользовательских задач
+
+%%% Библиография %%%
+\ifnumequal{\value{bibliosel}}{0}{%
+    \input{biblio/predefined}
+}{
+    \input{biblio/biblatex}
+}
+
+\begin{document}
+\gappto\captionsrussian{\input{common/renames}}
+\input{common/renames}
+\gappto\captionsrussian{\input{Dissertation/renames}}
+\input{Dissertation/renames}
+
+\include{Dissertation/contents}        % Оглавление
+
+\chapter{Сводка уравнений диссертации}\label{ch:AllEquations}
+\input{Dissertation/all_equations}
+
+\include{Dissertation/references}      % Список литературы
+
+\end{document}

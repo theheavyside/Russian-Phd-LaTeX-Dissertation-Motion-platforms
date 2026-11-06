@@ -100,6 +100,12 @@ presentation: SOURCE=presentation
 presentation:
 	$(compile)
 
+##! компиляция сводки уравнений диссертации (Dissertation/all_equations.tex)
+all_equations: TARGET=all_equations
+all_equations: SOURCE=all_equations
+all_equations:
+	$(compile)
+
 ##! компиляция черновика диссертации
 dissertation-draft: DRAFTON=1
 dissertation-draft: dissertation
@@ -163,6 +169,7 @@ clean:
 	"$(MAKE)" SOURCE=presentation TARGET=presentation clean-target
 	"$(MAKE)" SOURCE=presentation_booklet TARGET=presentation_booklet clean-target
 	"$(MAKE)" SOURCE=presentation_handout TARGET=presentation_handout clean-target
+	"$(MAKE)" SOURCE=all_equations TARGET=all_equations clean-target
 
 ##! полная очистка проекта от временных файлов
 distclean:
@@ -171,10 +178,11 @@ distclean:
 	"$(MAKE)" SOURCE=presentation TARGET=presentation distclean-target
 	"$(MAKE)" SOURCE=presentation_booklet TARGET=presentation_booklet distclean-target
 	"$(MAKE)" SOURCE=presentation_handout TARGET=presentation_handout distclean-target
+	"$(MAKE)" SOURCE=all_equations TARGET=all_equations distclean-target
 
 # include after "all" rule
 include examples.mk
 
-.PHONY: all dissertation synopsis presentation dissertation-draft \
+.PHONY: all dissertation synopsis presentation all_equations dissertation-draft \
 synopsis-draft pdflatex draft synopsis-booklet presentation-booklet\
 tikz release clean-target distclean-target clean distclean
