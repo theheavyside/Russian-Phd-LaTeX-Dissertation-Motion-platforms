@@ -42,7 +42,7 @@
 M_S^0 = -X_C^0 \times F_S^0 = -\left(X_C^0 \times e_S\right)\left(f_0 - k_sh\right),
 \end{equation}
 
-где $F^0_S$ – сила, действующая на платформу со стороны центральной опоры, $e_3 = \left[0~0~1\right]^T$ -– единичный вектор, направленный по оси $Z$. В дальнейшем будут использоваться первые две компоненты векторов моментов, т.к. вращение по курсу не рассматривается. Для того, чтобы учесть этот факт, введем вспомогательную матрицу $E_{12}$:
+где $F^0_S$ – сила, действующая на платформу со стороны центральной опоры, $e_3 = \left[0~0~1\right]^T$ -- единичный вектор, направленный по оси $Z$. В дальнейшем будут использоваться первые две компоненты векторов моментов, т.к. вращение по курсу не рассматривается. Для того, чтобы учесть этот факт, введем вспомогательную матрицу $E_{12}$:
 \begin{equation}
 \label{eq:AuxiliaryUnitMatrix}
 E_{12} = \begin{pmatrix}
@@ -239,10 +239,10 @@ Q_i  = \begin{pmatrix}
 \begin{aligned}
 & Q_i = k_iG_i,~i=1,\dots,3 \\
 & G_1 = R \left\{ L\sin{q_1}-R\sin{q_1}\cos{q_1}-R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_1} + \frac{1}{2L}\sin^3{q_1} \right] \right. +\\
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right)
+& \left.+ \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_1}+\cos{q_1}\cos{q_2}\right)
 \right\} \\
-& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}-R^2 \left[ \frac{2}{8b} {\left( \cos{q_2}-\cos{q_2} \right)}^2 \cos{q_2} + \frac{2}{2L}\sin^3{q_2} \right] \right. +\\
-& \left.+ \frac{R^3}{8Lb} \left( \cos{q_2}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_2}\cos{q_2}\right)
+& G_2 = R \left\{ L\sin{q_2}-R\sin{q_2}\cos{q_2}+R^2 \left[ \frac{1}{8b} {\left( \cos{q_1}-\cos{q_2} \right)}^2 \cos{q_2} - \frac{1}{2L}\sin^3{q_2} \right] \right. -\\
+& \left.- \frac{R^3}{8Lb} \left( \cos{q_1}-\cos{q_2} \right)^2 \left(\cos{2q_2}+\cos{q_1}\cos{q_2}\right)
 \right\} \\
 & G_3 = R\left\{L\sin{q_3}-R\sin{q_3}\cos{q_3}-R^2\frac{1}{2L}\sin^3q_3\right\}
 \end{aligned}
@@ -504,11 +504,11 @@ y_cmg \\-x_cmg
 \begin{equation}
 \label{eq:LeastSquareMethodFormulation}
 \begin{aligned}
-& J_c\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
-c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}-\left(\bar{S}_y^0\bar{k}\right)_iz_c  \bar{y_c}\right|^2\right], \\
-& J_c\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-k_s\bar{h_i}-\frac{mg-f_0}{L}\right|}^2, \\
-& J_c\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\
-& J_c\left(k_s,~f_0\right)\rightarrow\min.
+& J_{xyz}\left(x_c,y_c,z_c\right)=\sum_{i=1}^n\left[
+c_{i,x}\left|\bar{p}_{3,i}-\left(\bar{S}_x^0\bar{k}\right)_iz_c + \bar{x_c}\right|^2 + c_{i,y}\left|\bar{p}_{2,i}+\left(\bar{S}_y^0\bar{k}\right)_iz_c - \bar{y_c}\right|^2\right], \\
+& J_{sf}\left(k_s,~f_0\right)=\sum_{i=1}^n{\left|\bar{p}_{1,i}-\frac{k_s\bar{h_i}}{L}-\frac{mg-f_0}{L}\right|}^2, \\
+& J_{xyz}\left(x_c,~y_c,~z_c\right)\rightarrow\min, \\
+& J_{sf}\left(k_s,~f_0\right)\rightarrow\min.
 \end{aligned}
 \end{equation}
 

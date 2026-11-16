@@ -107,7 +107,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \begin{equation}
 \label{eq:KinematicsSquareEqKoefficients}
 \begin{aligned}
-	& \bar{A_i} = (x_{Ci} - x_{Ai})^2 + (y_{Ci} - y_{Ai})^2 + (z_{Ci} - z_{Ai})^2 + R^2 + L^2,\\
+	& \bar{A_i} = (x_{Ci} - x_{Ai})^2 + (y_{Ci} - y_{Ai})^2 + (z_{Ci} - z_{Ai})^2 + R^2 - L^2,\\
 	& \bar{B_i} = -2R(y_{Ci} - y_{Ai}),\\
 	& \bar{C_i} = 2R(z_{Ci} - z_{Ai}).
 \end{aligned}
@@ -151,7 +151,7 @@ $R$ -- длина кривошипа, $L$ -- длина шатуна, $a$ -- р�
 \label{eq:Kinematics2DOFResult}
 \begin{aligned}
 	& q_i = -2\arctan\frac{\bar{B_i}\pm\sqrt{\bar{B_i^2} + \bar{C_i^2} - \bar{A_i^2}}}{\bar{A_i} - \bar{C_i}},~i = 1,2\\
-	& \bar{A_i} = (x_{Ci} - x_{Ai})^2 + (y_{Ci} - y_{Ai})^2 + (z_{Ci} - z_{Ai})^2 + R^2 + L^2,\\
+	& \bar{A_i} = (x_{Ci} - x_{Ai})^2 + (y_{Ci} - y_{Ai})^2 + (z_{Ci} - z_{Ai})^2 + R^2 - L^2,\\
 	& \bar{B_i} = -2R(y_{Ci} - y_{Ai}),\\
 	& \bar{C_i} = 2R(z_{Ci} - z_{Ai}).
 \end{aligned}
